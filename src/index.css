@@ -2,95 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* TriBridge Payment System Design System - Professional Fintech Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Brand Colors */
+    --background: 217 33% 97%;
+    --foreground: 217 19% 12%;
 
+    /* Card System */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 217 19% 12%;
 
+    /* Interactive Elements */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 217 19% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Professional Blue */
+    --primary: 217 87% 45%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 217 87% 40%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Neutral Gray */
+    --secondary: 217 15% 95%;
+    --secondary-foreground: 217 19% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Tones */
+    --muted: 217 15% 96%;
+    --muted-foreground: 217 12% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Financial Green */
+    --accent: 142 71% 45%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Status Colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Currency-Specific Colors */
+    --rub-color: 0 72% 51%;
+    --rmb-color: 0 84% 50%;
+    --usd-color: 217 87% 45%;
 
-    --radius: 0.5rem;
+    /* UI Elements */
+    --border: 217 20% 90%;
+    --input: 217 20% 95%;
+    --ring: 217 87% 45%;
 
-    --sidebar-background: 0 0% 98%;
+    /* Design System Enhancements */
+    --gradient-primary: linear-gradient(135deg, hsl(217 87% 45%), hsl(217 87% 35%));
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%), hsl(142 71% 35%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 87% 45%), hsl(217 77% 55%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(217 15% 98%));
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Shadows */
+    --shadow-soft: 0 4px 6px -1px hsl(217 87% 45% / 0.1);
+    --shadow-medium: 0 10px 15px -3px hsl(217 87% 45% / 0.1);
+    --shadow-strong: 0 25px 50px -12px hsl(217 87% 45% / 0.25);
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Animation Variables */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark mode for professional fintech interface */
+    --background: 217 19% 7%;
+    --foreground: 217 15% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 217 19% 10%;
+    --card-foreground: 217 15% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 217 19% 10%;
+    --popover-foreground: 217 15% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217 87% 55%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 217 87% 50%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 217 19% 15%;
+    --secondary-foreground: 217 15% 85%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217 19% 12%;
+    --muted-foreground: 217 12% 55%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 142 71% 50%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --success: 142 71% 50%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 98%;
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --rub-color: 0 72% 56%;
+    --rmb-color: 0 84% 55%;
+    --usd-color: 217 87% 55%;
+
+    --border: 217 19% 20%;
+    --input: 217 19% 15%;
+    --ring: 217 87% 55%;
+
+    /* Dark gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 87% 55%), hsl(217 87% 45%));
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 50%), hsl(142 71% 40%));
+    --gradient-hero: linear-gradient(135deg, hsl(217 87% 55%), hsl(217 77% 65%));
+    --gradient-subtle: linear-gradient(180deg, hsl(217 19% 10%), hsl(217 19% 8%));
   }
 }
 
