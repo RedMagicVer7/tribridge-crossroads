@@ -19,7 +19,7 @@ TriBridge follows a **front-end and back-end separated** architecture:
 - **Framework**: React + Vite + TypeScript
 - **UI Library**: ShadCN/UI + Tailwind CSS
 - **State Management**: React Query
-- **Port**: http://localhost:8080
+- **Port**: http://localhost:3000
 
 ### Backend (API服务)
 - **Framework**: Express.js + TypeScript + Socket.IO
