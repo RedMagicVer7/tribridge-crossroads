@@ -9,7 +9,14 @@
     "lint": "next lint",
     "vite:dev": "vite",
     "vite:build": "vite build",
-    "vite:preview": "vite preview"
+    "vite:preview": "vite preview",
+    "deploy": "./deploy-github-pages.sh",
+    "deploy:github": "gh-pages -d dist",
+    "deploy:vercel": "vercel --prod",
+    "deploy:netlify": "netlify deploy --prod --dir=dist",
+    "docker:build": "docker build -t tribridge .",
+    "docker:run": "docker run -p 8000:8000 tribridge",
+    "docker:compose": "docker-compose up --build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -81,6 +88,7 @@
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "gh-pages": "^6.3.0",
     "globals": "^15.15.0",
     "lovable-tagger": "^1.1.9",
     "postcss": "^8.5.6",

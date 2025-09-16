@@ -7,6 +7,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "start:simple": "node dist/index-simple.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -15,7 +16,11 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "ts-node prisma/seed.ts"
+    "db:seed": "ts-node prisma/seed.ts",
+    "deploy:heroku": "git push heroku main",
+    "deploy:railway": "railway up",
+    "docs": "npx swagger-jsdoc -d swaggerDef.js src/routes/*.ts -o swagger.json",
+    "health": "curl http://localhost:8000/api/health || echo 'Server not running'"
   },
   "dependencies": {
     "express": "^4.18.2",
