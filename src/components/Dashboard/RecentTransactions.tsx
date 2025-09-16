@@ -1,10 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import { ArrowUpRight, ArrowDownLeft, Clock, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RecentTransactions = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
   
@@ -129,7 +131,12 @@ const RecentTransactions = () => {
       <CardHeader className="bg-gradient-subtle border-b">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">Recent Transactions</CardTitle>
-          <Button variant="ghost" size="sm" className="text-primary hover:text-primary-hover">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-primary hover:text-primary-hover"
+            onClick={() => navigate('/transactions')}
+          >
             View All
             <ArrowUpRight className="h-4 w-4 ml-1" />
           </Button>
