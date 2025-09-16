@@ -104,6 +104,39 @@ For production deployment, use `.env.production` with appropriate values.
 - `GET /api/blockchain/balance` - Token balance
 - `GET /api/blockchain/rates` - Exchange rates
 
+## 🧪 Testing
+
+### Frontend Testing
+
+```bash
+# Run frontend tests
+npm test
+
+# Run frontend tests in watch mode
+npm run test:watch
+
+# Run frontend tests with UI
+npm run test:ui
+```
+
+Frontend tests use Vitest with JSDOM environment. Test files are located in `src/services/__tests__/`.
+
+### Backend Testing
+
+```bash
+# Run backend tests
+cd backend
+npm test
+
+# Run backend tests in watch mode
+npm run test:watch
+
+# Run backend tests with coverage
+npm run test:coverage
+```
+
+Backend tests use Jest with Node.js environment. Test files are located in `backend/src/services/__tests__/`.
+
 ## 🐳 Deployment
 
 ### Docker Deployment
