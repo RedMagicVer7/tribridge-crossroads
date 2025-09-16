@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ArrowUpRight, ArrowDownLeft, Repeat, TrendingUp } from "lucide-react";
 
 const StatsCards = () => {

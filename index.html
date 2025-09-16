@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tribridge-crossroads</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    <title>TriBridge - Cross-Border Payment Platform</title>
+    <meta name="description" content="TriBridge - A blockchain-based cross-border payment platform for seamless international transactions" />
+    <meta name="author" content="RedMagicVer7" />
 
-    <meta property="og:title" content="tribridge-crossroads" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:title" content="TriBridge - Cross-Border Payment Platform" />
+    <meta property="og:description" content="A blockchain-based cross-border payment platform for seamless international transactions" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
@@ -19,6 +19,16 @@
 
   <body>
     <div id="root"></div>
+    <script>
+      // GitHub Pages SPA routing fix
+      (function() {
+        const redirectPath = sessionStorage.getItem('redirectPath');
+        if (redirectPath) {
+          sessionStorage.removeItem('redirectPath');
+          history.replaceState(null, '', redirectPath);
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

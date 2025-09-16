@@ -1,5 +1,5 @@
-import WalletManagement from "@/components/Wallet/WalletManagement";
-import Header from "@/components/Layout/Header";
+import WalletManagement from "../components/Wallet/WalletManagement";
+import Header from "../components/Layout/Header";
 
 const WalletPage = () => {
   return (

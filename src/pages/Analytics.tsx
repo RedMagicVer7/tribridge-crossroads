@@ -1,5 +1,5 @@
-import Analytics from "@/components/Analytics/Analytics";
-import Header from "@/components/Layout/Header";
+import Analytics from "../components/Analytics/Analytics";
+import Header from "../components/Layout/Header";
 
 const AnalyticsPage = () => {
   return (

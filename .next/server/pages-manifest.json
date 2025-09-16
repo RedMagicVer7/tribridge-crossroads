@@ -1,0 +1,15 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/Analytics": "pages/Analytics.js",
+  "/Index": "pages/Index.js",
+  "/Compliance": "pages/Compliance.js",
+  "/NotFound": "pages/NotFound.js",
+  "/Notifications": "pages/Notifications.js",
+  "/Risk": "pages/Risk.js",
+  "/Transactions": "pages/Transactions.js",
+  "/Wallet": "pages/Wallet.js",
+  "/Settings": "pages/Settings.js",
+  "/Profile": "pages/Profile.js",
+  "/_document": "pages/_document.js"
+}

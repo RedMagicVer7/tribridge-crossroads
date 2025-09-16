@@ -1,5 +1,5 @@
-import RiskMonitoring from "@/components/Risk/RiskMonitoring";
-import Header from "@/components/Layout/Header";
+import RiskMonitoring from "../components/Risk/RiskMonitoring";
+import Header from "../components/Layout/Header";
 
 const RiskPage = () => {
   return (

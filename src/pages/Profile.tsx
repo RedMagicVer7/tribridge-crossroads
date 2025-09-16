@@ -4,8 +4,8 @@
  */
 
 import React from 'react'
-import Header from '@/components/Layout/Header'
-import { UserProfile } from '@/components/Profile/UserProfile'
+import Header from '../components/Layout/Header'
+import { UserProfile } from '../components/Profile/UserProfile'
 
 const ProfilePage = () => {
   return (

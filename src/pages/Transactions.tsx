@@ -1,5 +1,5 @@
-import TransactionHistory from "@/components/Transactions/TransactionHistory";
-import Header from "@/components/Layout/Header";
+import TransactionHistory from "../components/Transactions/TransactionHistory";
+import Header from "../components/Layout/Header";
 
 const TransactionsPage = () => {
   return (

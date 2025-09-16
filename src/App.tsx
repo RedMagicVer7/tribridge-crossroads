@@ -17,30 +17,47 @@ import RiskPage from "./pages/Risk";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TranslationProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/compliance" element={<CompliancePage />} />
-            <Route path="/wallet" element={<WalletPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/notifications" element={<NotificationsPage />} />
-            <Route path="/transactions" element={<TransactionsPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/risk" element={<RiskPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </TranslationProvider>
-  </QueryClientProvider>
-);
+// 获取GitHub Pages的base路径
+const getBasePath = () => {
+  if (import.meta.env.BASE_URL) {
+    return import.meta.env.BASE_URL;
+  }
+  // GitHub Pages默认使用仓库名作为路径前缀
+  if (window.location.hostname.includes('github.io')) {
+    const pathParts = window.location.pathname.split('/');
+    return pathParts.length > 1 ? `/${pathParts[1]}/` : '/';
+  }
+  return '/';
+};
+
+const App = () => {
+  const basename = getBasePath();
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TranslationProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter basename={basename}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/compliance" element={<CompliancePage />} />
+              <Route path="/wallet" element={<WalletPage />} />
+              <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/transactions" element={<TransactionsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/risk" element={<RiskPage />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </TranslationProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../ui/dialog";
 import { ArrowUpDown, Info, Zap, CheckCircle, Clock, AlertTriangle, Copy, Loader2, Shield, XCircle, TrendingUp, BarChart3 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useToast } from "@/hooks/use-toast";
-import { exchangeRateService, type ExchangeRate } from "@/services/exchangeRateService";
-import { transactionService, type Transaction, type TransactionPreview } from "@/services/transactionService";
+import { Badge } from "../ui/badge";
+import { Separator } from "../ui/separator";
+import { Progress } from "../ui/progress";
+import { Alert, AlertDescription } from "../ui/alert";
+import { useToast } from "../../hooks/use-toast";
+import { exchangeRateService, type ExchangeRate } from "../../services/exchangeRateService";
+import { transactionService, type Transaction, type TransactionPreview } from "../../services/transactionService";
 
 const CurrencyExchange = () => {
   const { toast } = useToast();

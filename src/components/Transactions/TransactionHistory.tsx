@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Separator } from "../ui/separator";
+import { Input } from "../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { 
   ArrowUpRight, 
   ArrowDownLeft, 
@@ -18,7 +18,7 @@ import {
   Copy,
   RefreshCw
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "../../hooks/use-toast";
 
 interface Transaction {
   id: string;

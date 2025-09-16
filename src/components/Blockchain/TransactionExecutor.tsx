@@ -2,15 +2,15 @@
 
 import React, { useState, useCallback } from 'react'
 import { useAccount } from 'wagmi'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Button } from '../ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { Badge } from '../ui/badge'
+import { Progress } from '../ui/progress'
 import { ExternalLink, Send, Clock, CheckCircle, AlertCircle, Hash, DollarSign } from 'lucide-react'
-import { WalletService, TransactionRequest, TransactionResult } from '@/services/walletService'
+import { WalletService, TransactionRequest, TransactionResult } from '../../services/walletService'
 
 interface TransactionStep {
   id: number

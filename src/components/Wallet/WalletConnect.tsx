@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Button } from "../ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Badge } from "../ui/badge"
 import { Wallet, ExternalLink, Copy, CheckCircle } from 'lucide-react'
-import { WalletService, WalletBalance } from '@/services/walletService'
+import { WalletService, WalletBalance } from "../../services/walletService"
 
 // Simple toast replacement
 const toast = {

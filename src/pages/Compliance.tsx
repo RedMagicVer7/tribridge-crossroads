@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import KYCVerification from "@/components/Compliance/KYCVerification";
-import AMLAssessment from "@/components/Compliance/AMLAssessment";
-import Header from "@/components/Layout/Header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import KYCVerification from "../components/Compliance/KYCVerification";
+import AMLAssessment from "../components/Compliance/AMLAssessment";
+import Header from "../components/Layout/Header";
 
 const CompliancePage = () => {
   const [activeTab, setActiveTab] = useState("kyc");

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriBridge 显示问题诊断</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .status-card {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { border-left: 4px solid #10b981; }
+        .warning { border-left: 4px solid #f59e0b; }
+        .error { border-left: 4px solid #ef4444; }
+        .test-result { margin: 5px 0; padding: 5px; }
+        .test-pass { color: #10b981; }
+        .test-fail { color: #ef4444; }
+        .test-info { color: #3b82f6; }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2563eb; }
+        .logs {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 TriBridge 本地显示问题诊断</h1>
+    
+    <div class="status-card success">
+        <h3>📊 诊断状态</h3>
+        <div id="diagnosticResults"></div>
+    </div>
+
+    <div class="status-card warning">
+        <h3>🧪 测试功能</h3>
+        <button onclick="testLocalServer()">测试本地服务器</button>
+        <button onclick="testAPI()">测试API响应</button>
+        <button onclick="testResources()">测试静态资源</button>
+        <button onclick="openTriBridge()">打开TriBridge应用</button>
+        <button onclick="clearCache()">清除浏览器缓存</button>
+    </div>
+
+    <div class="status-card">
+        <h3>📋 测试结果</h3>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="status-card">
+        <h3>🔧 解决方案建议</h3>
+        <div id="solutions"></div>
+    </div>
+
+    <div class="status-card">
+        <h3>📝 详细日志</h3>
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script>
+        const log = (message) => {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.textContent += `[${timestamp}] ${message}\n`;
+            logs.scrollTop = logs.scrollHeight;
+        };
+
+        const addResult = (message, type = 'info') => {
+            const results = document.getElementById('testResults');
+            const div = document.createElement('div');
+            div.className = `test-result test-${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        };
+
+        const addSolution = (message) => {
+            const solutions = document.getElementById('solutions');
+            const div = document.createElement('div');
+            div.innerHTML = `<p>${message}</p>`;
+            solutions.appendChild(div);
+        };
+
+        // 初始化诊断
+        window.onload = () => {
+            log('开始TriBridge显示问题诊断...');
+            runBasicDiagnostics();
+        };
+
+        function runBasicDiagnostics() {
+            const diagnostics = document.getElementById('diagnosticResults');
+            
+            // 检查基本浏览器信息
+            const browserInfo = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                cookieEnabled: navigator.cookieEnabled,
+                onLine: navigator.onLine
+            };
+
+            log(`浏览器信息: ${JSON.stringify(browserInfo, null, 2)}`);
+            
+            diagnostics.innerHTML = `
+                <div class="test-result test-info">浏览器: ${browserInfo.userAgent}</div>
+                <div class="test-result test-info">语言: ${browserInfo.language}</div>
+                <div class="test-result test-info">平台: ${browserInfo.platform}</div>
+                <div class="test-result test-${browserInfo.onLine ? 'pass' : 'fail'}">网络状态: ${browserInfo.onLine ? '在线' : '离线'}</div>
+            `;
+
+            // 自动开始测试
+            setTimeout(() => {
+                testLocalServer();
+                testResources();
+            }, 1000);
+        }
+
+        async function testLocalServer() {
+            log('测试本地服务器连接...');
+            try {
+                const response = await fetch('http://localhost:8080', { 
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                });
+                
+                if (response.ok) {
+                    addResult('✅ 本地服务器响应正常 (HTTP ' + response.status + ')', 'pass');
+                    log(`服务器响应头: ${JSON.stringify([...response.headers.entries()])}`);
+                } else {
+                    addResult('❌ 本地服务器响应异常 (HTTP ' + response.status + ')', 'fail');
+                    addSolution('检查Vite开发服务器是否正在运行: npm run vite:dev');
+                }
+            } catch (error) {
+                addResult('❌ 无法连接到本地服务器: ' + error.message, 'fail');
+                addSolution('确保开发服务器运行在8080端口: npm run vite:dev');
+                log(`连接错误: ${error}`);
+            }
+        }
+
+        async function testAPI() {
+            log('测试API端点...');
+            const endpoints = [
+                'http://localhost:8080',
+                'http://localhost:8080/src/main.tsx',
+                'http://localhost:8080/@vite/client'
+            ];
+
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, { cache: 'no-cache' });
+                    const status = response.ok ? 'pass' : 'fail';
+                    addResult(`${status === 'pass' ? '✅' : '❌'} ${endpoint}: ${response.status}`, status);
+                    log(`${endpoint}: ${response.status} ${response.statusText}`);
+                } catch (error) {
+                    addResult(`❌ ${endpoint}: ${error.message}`, 'fail');
+                    log(`${endpoint}: ${error}`);
+                }
+            }
+        }
+
+        async function testResources() {
+            log('测试静态资源加载...');
+            const resources = [
+                { url: 'http://localhost:8080/src/index.css', type: 'CSS' },
+                { url: 'http://localhost:8080/src/main.tsx', type: 'JS' },
+                { url: 'http://localhost:8080/public/favicon.ico', type: 'Icon' }
+            ];
+
+            for (const resource of resources) {
+                try {
+                    const response = await fetch(resource.url, { cache: 'no-cache' });
+                    const status = response.ok ? 'pass' : 'fail';
+                    addResult(`${status === 'pass' ? '✅' : '❌'} ${resource.type}: ${response.status}`, status);
+                    log(`${resource.type} (${resource.url}): ${response.status}`);
+                } catch (error) {
+                    addResult(`❌ ${resource.type}: ${error.message}`, 'fail');
+                    log(`${resource.type} 错误: ${error}`);
+                }
+            }
+        }
+
+        function openTriBridge() {
+            log('打开TriBridge应用...');
+            window.open('http://localhost:8080', '_blank');
+            addResult('🌐 已在新标签页打开TriBridge应用', 'info');
+            addSolution('如果页面显示异常，请检查浏览器控制台错误信息');
+        }
+
+        function clearCache() {
+            log('尝试清除浏览器缓存...');
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                });
+                addResult('✅ 已清除Service Worker缓存', 'pass');
+            }
+            
+            // 强制刷新页面缓存
+            if (location.protocol === 'http:') {
+                addResult('💡 建议使用Ctrl+F5强制刷新TriBridge页面', 'info');
+            }
+            
+            addSolution('手动清除缓存步骤：1. 打开开发者工具(F12) 2. 右键刷新按钮 3. 选择"清空缓存并硬性重新加载"');
+        }
+    </script>
+</body>
+</html>

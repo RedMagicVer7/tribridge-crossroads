@@ -43,15 +43,35 @@ fi
 echo -e "${BLUE}📦 Installing dependencies...${NC}"
 npm ci
 
-# Build the project
-echo -e "${BLUE}🔨 Building the project...${NC}"
-npm run build
+# Build the project with production environment
+echo -e "${BLUE}🔨 Building the project for production...${NC}"
+NODE_ENV=production npm run build
 
 # Check if build was successful
 if [ ! -d "$BUILD_DIR" ]; then
     echo -e "${RED}❌ Error: Build failed. $BUILD_DIR directory not found.${NC}"
     exit 1
 fi
+
+# Create 404.html for SPA routing on GitHub Pages
+echo -e "${BLUE}📝 Creating 404.html for SPA routing...${NC}"
+cat > $BUILD_DIR/404.html << 'EOF'
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TriBridge - Redirecting</title>
+    <script>
+      // For GitHub Pages SPA routing
+      sessionStorage.setItem('redirectPath', location.pathname + location.search + location.hash);
+      location.replace('/tribridge-crossroads/');
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
+EOF
 
 # Add CNAME file for custom domain (if needed)
 echo "tribridge.pages.dev" > $BUILD_DIR/CNAME

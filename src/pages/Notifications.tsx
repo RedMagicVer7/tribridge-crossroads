@@ -1,5 +1,5 @@
-import NotificationCenter from "@/components/Notifications/NotificationCenter";
-import Header from "@/components/Layout/Header";
+import NotificationCenter from "../components/Notifications/NotificationCenter";
+import Header from "../components/Layout/Header";
 
 const NotificationsPage = () => {
   return (
