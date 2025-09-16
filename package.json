@@ -2,6 +2,7 @@
   "name": "tribridge-blockchain",
   "private": true,
   "version": "2.0.0",
+  "type": "module",
   "keywords": [
     "blockchain",
     "cross-border-payment",
@@ -20,8 +21,8 @@
     "vite:dev": "vite",
     "vite:build": "vite build",
     "vite:preview": "vite preview",
-    "deploy": "NODE_ENV=production ./deploy-github-pages.sh",
-    "deploy:github": "NODE_ENV=production gh-pages -d dist",
+    "deploy": "./deploy-github-pages.sh",
+    "deploy:github": "gh-pages -d dist",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist",
     "docker:build": "docker build -t tribridge .",

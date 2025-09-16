@@ -45,7 +45,7 @@ TriBridge follows a **front-end and back-end separated** architecture:
 cd tribridge-crossroads
 npm install
 npm run dev
-# Visit: http://localhost:8080
+# Visit: http://localhost:3000
 ```
 
 ### Backend Setup
@@ -60,31 +60,20 @@ npm start
 
 ### Environment Configuration
 
-Create a `.env` file in the backend directory with the following variables:
+Create a `.env` file in the project root directory with the following variables:
 
 ```env
-# Server Configuration
+# Development Environment Variables
 NODE_ENV=development
-PORT=8000
+VITE_API_URL=http://localhost:8000
 
-# Database Configuration
-DATABASE_URL=postgresql://user:password@localhost:5432/tribridge
-
-# Redis Configuration
-REDIS_URL=redis://localhost:6379
-
-# JWT Configuration
-JWT_SECRET=your-super-secure-jwt-secret-here-min-32-chars
-
-# Blockchain Configuration
-ETH_RPC_URL=https://mainnet.infura.io/v3/your_infura_project_id
-TRON_RPC_URL=https://api.trongrid.io
-BSC_RPC_URL=https://bsc-dataseed1.binance.org
-
-# KYC/AML Service Configuration
-SUMSUB_APP_TOKEN=your_sumsub_app_token_here
-ONFIDO_API_TOKEN=your_onfido_api_token_here
+# Blockchain Configuration (testnet)
+VITE_ETH_RPC_URL=https://sepolia.infura.io/v3/your_infura_project_id
+VITE_TRON_RPC_URL=https://api.nileex.io
+VITE_BSC_RPC_URL=https://data-seed-prebsc-1-s1.binance.org:8545
 ```
+
+For production deployment, use `.env.production` with appropriate values.
 
 ## 🛠️ API Endpoints
 
@@ -140,6 +129,8 @@ npm run deploy:vercel
 # Deploy to Netlify
 npm run deploy:netlify
 ```
+
+Note: For Netlify deployment, the project includes a `netlify.toml` configuration file that specifies the build command and publish directory.
 
 ### Backend Deployment
 
