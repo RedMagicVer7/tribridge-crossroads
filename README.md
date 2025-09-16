@@ -1,73 +1,239 @@
-# Welcome to your Lovable project
+# TriBridge: Cross-border Payment Platform
 
-## Project info
+TriBridge is a cutting-edge cross-border payment platform that leverages blockchain technology to enable fast, secure, and compliant international money transfers. Built with a modern tech stack, it supports multi-chain stablecoin settlements and integrates comprehensive KYC/AML compliance services.
 
-**URL**: https://lovable.dev/projects/19f19c2c-5bc9-4550-892f-b57d38f61968
+## 🌟 Key Features
 
-## How can I edit this code?
+- **Multi-chain Stablecoin Support**: Seamless transactions across Ethereum, TRON, and BSC networks
+- **KYC/AML Compliance**: Integrated with Sumsub, Onfido, and domestic compliance providers
+- **Real-time Exchange Rates**: Live currency conversion with minimal slippage
+- **Secure Transactions**: Multi-signature wallets and regulated bridges
+- **Comprehensive Dashboard**: Real-time monitoring, analytics, and transaction history
+- **Responsive UI**: Works seamlessly across desktop and mobile devices
 
-There are several ways of editing your application.
+## 🏗️ Architecture
 
-**Use Lovable**
+TriBridge follows a **front-end and back-end separated** architecture:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/19f19c2c-5bc9-4550-892f-b57d38f61968) and start prompting.
+### Frontend (展示UI)
+- **Framework**: React + Vite + TypeScript
+- **UI Library**: ShadCN/UI + Tailwind CSS
+- **State Management**: React Query
+- **Port**: http://localhost:8080
 
-Changes made via Lovable will be committed automatically to this repo.
+### Backend (API服务)
+- **Framework**: Express.js + TypeScript + Socket.IO
+- **Port**: http://localhost:8000
+- **Database**: PostgreSQL + Redis
+- **Authentication**: JWT + API Key validation
 
-**Use your preferred IDE**
+### Blockchain Integration
+- **Supported Networks**: Ethereum, TRON, BSC
+- **Stablecoins**: USDT, USDC, DAI, BUSD
+- **Wallet Integration**: MetaMask and other Web3 wallets
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Quick Start
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+- Docker (for containerized deployment)
 
-Follow these steps:
+### Frontend Setup
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+cd tribridge-crossroads
+npm install
 npm run dev
+# Visit: http://localhost:8080
 ```
 
-**Edit a file directly in GitHub**
+### Backend Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+cd backend
+npm install
+npm run build
+npm start
+# API: http://localhost:8000
+```
 
-**Use GitHub Codespaces**
+### Environment Configuration
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Create a `.env` file in the backend directory with the following variables:
 
-## What technologies are used for this project?
+```env
+# Server Configuration
+NODE_ENV=development
+PORT=8000
 
-This project is built with:
+# Database Configuration
+DATABASE_URL=postgresql://user:password@localhost:5432/tribridge
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Redis Configuration
+REDIS_URL=redis://localhost:6379
 
-## How can I deploy this project?
+# JWT Configuration
+JWT_SECRET=your-super-secure-jwt-secret-here-min-32-chars
 
-Simply open [Lovable](https://lovable.dev/projects/19f19c2c-5bc9-4550-892f-b57d38f61968) and click on Share -> Publish.
+# Blockchain Configuration
+ETH_RPC_URL=https://mainnet.infura.io/v3/your_infura_project_id
+TRON_RPC_URL=https://api.trongrid.io
+BSC_RPC_URL=https://bsc-dataseed1.binance.org
 
-## Can I connect a custom domain to my Lovable project?
+# KYC/AML Service Configuration
+SUMSUB_APP_TOKEN=your_sumsub_app_token_here
+ONFIDO_API_TOKEN=your_onfido_api_token_here
+```
 
-Yes, you can!
+## 🛠️ API Endpoints
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Health & Info
+- `GET /health` - Health check
+- `GET /api/docs` - API documentation
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/refresh` - Refresh token
+
+### User Management
+- `GET /api/user/profile` - Get user profile
+- `PUT /api/user/profile` - Update user profile
+
+### KYC Services
+- `POST /api/kyc/submit` - Submit KYC verification
+- `GET /api/kyc/status` - Check KYC status
+
+### Transactions
+- `POST /api/transactions/preview` - Preview transaction
+- `POST /api/transactions/execute` - Execute transaction
+- `GET /api/transactions/history` - Transaction history
+
+### Blockchain
+- `GET /api/blockchain/chains` - Supported chains
+- `GET /api/blockchain/balance` - Token balance
+- `GET /api/blockchain/rates` - Exchange rates
+
+## 🐳 Deployment
+
+### Docker Deployment
+
+```bash
+# Build and run with Docker
+npm run docker:build
+npm run docker:run
+
+# Or use Docker Compose
+npm run docker:compose
+```
+
+### Cloud Deployment
+
+```bash
+# Deploy to GitHub Pages
+npm run deploy:github
+
+# Deploy to Vercel
+npm run deploy:vercel
+
+# Deploy to Netlify
+npm run deploy:netlify
+```
+
+### Backend Deployment
+
+```bash
+# Deploy to Heroku
+cd backend
+npm run deploy:heroku
+
+# Deploy to Railway
+cd backend
+npm run deploy:railway
+```
+
+## 🔧 Development
+
+### Project Structure
+
+```
+tribridge-crossroads/
+├── src/                 # Frontend source code
+│   ├── components/      # React components
+│   ├── pages/           # Page components
+│   ├── services/        # API services
+│   ├── hooks/           # Custom hooks
+│   └── contexts/        # React contexts
+├── public/              # Static assets
+├── backend/             # Backend API service
+│   ├── src/             # Backend source code
+│   │   ├── routes/      # API routes
+│   │   ├── services/    # Business logic
+│   │   ├── middleware/  # Express middleware
+│   │   └── utils/       # Utility functions
+│   └── prisma/          # Database schema
+├── Dockerfile           # Docker configuration
+├── docker-compose.yml   # Multi-container setup
+└── nginx.conf           # Nginx reverse proxy
+```
+
+### Available Scripts
+
+#### Frontend
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+#### Backend
+- `npm run dev` - Start development server with nodemon
+- `npm run build` - Compile TypeScript to JavaScript
+- `npm start` - Start production server
+- `npm test` - Run tests
+- `npm run lint` - Run ESLint
+
+#### Deployment
+- `npm run deploy:github` - Deploy to GitHub Pages
+- `npm run deploy:vercel` - Deploy to Vercel
+- `npm run deploy:netlify` - Deploy to Netlify
+- `npm run docker:build` - Build Docker image
+- `npm run docker:compose` - Run with Docker Compose
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Secure user sessions
+- **API Key Validation**: Service-to-service authentication
+- **Rate Limiting**: Protection against abuse
+- **Helmet.js**: Security headers
+- **CORS Configuration**: Controlled resource sharing
+- **Input Validation**: Zod schema validation
+- **Encrypted Storage**: Sensitive data encryption
+
+## 📊 Monitoring & Analytics
+
+- **Real-time Updates**: WebSocket connections
+- **Performance Metrics**: Transaction processing times
+- **Error Tracking**: Comprehensive logging
+- **Health Checks**: Automated system monitoring
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support, email support@tribridge.com or join our [Discord community](https://discord.gg/tribridge).
+
+---
+
+**TriBridge Team**  
+*Building the next generation of cross-border payment infrastructure*

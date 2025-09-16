@@ -2,6 +2,15 @@
   "name": "tribridge-blockchain",
   "private": true,
   "version": "2.0.0",
+  "keywords": [
+    "blockchain",
+    "cross-border-payment",
+    "frontend-backend-separation",
+    "react",
+    "vite",
+    "typescript",
+    "nodejs"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
