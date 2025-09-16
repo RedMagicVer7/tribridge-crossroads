@@ -8,8 +8,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   
   return {
-    // 添加base配置以支持GitHub Pages
-    base: mode === 'production' ? '/tribridge-crossroads/' : '/',
+    // 对于Netlify部署，使用相对路径
+    base: './',
     server: {
       host: "::",
       port: 3000,
