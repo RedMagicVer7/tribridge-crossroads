@@ -1,53 +1,47 @@
 # TriBridge Version Information
 
-## Current Version: v3.0.0 - Frontend-Backend Separation
+## Current Version: v3.0.0 - Next.js Full-stack Architecture
 
-This version represents a major architectural milestone for TriBridge - the complete separation of frontend and backend components.
+This version represents a major architectural milestone for TriBridge - the migration from frontend-backend separation to a full-stack Next.js architecture for simplified deployment.
 
 ### Version Details
-- **Frontend Version**: 2.0.0 (in root package.json)
-- **Backend Version**: 1.0.0 (in backend/package.json)
-- **Release Version**: 3.0.0 (tagged release)
-- **Architecture**: Frontend-Backend Separation
+- **Version**: v3.0.0
+- **Architecture**: Next.js Full-stack Architecture
+- **Frontend**: Next.js 13+ with App Router
+- **Backend**: Next.js API Routes
 - **Release Date**: 2025-09-17
 
 ### Key Features of This Release
 
-#### Frontend (React + Vite + TypeScript)
-- Complete React-based user interface
-- Vite for fast development and building
-- TypeScript for type safety
-- Responsive design with Tailwind CSS
-- Shadcn UI components
-- Multi-language support (Chinese/English/Russian)
-- Dark/Light theme support
+#### Full-stack Application (Next.js)
+- **Framework**: Next.js 13+ with App Router
+- **Frontend**: React + TypeScript + Tailwind CSS + ShadCN/UI
+- **Backend**: Next.js API Routes
+- **State Management**: React Query
+- **Port**: http://localhost:3000
 
-#### Backend (Node.js + Express + TypeScript)
-- RESTful API architecture
-- Express.js framework
-- TypeScript implementation
-- Multi-chain blockchain integration (Ethereum, TRON, BSC)
-- KYC/AML compliance services
-- Database integration (PostgreSQL)
-- Redis caching
-- WebSocket support for real-time updates
+#### Blockchain Integration
+- **Supported Networks**: Ethereum, TRON, BSC
+- **Stablecoins**: USDT, USDC, DAI, BUSD
+- **Wallet Integration**: MetaMask and other Web3 wallets
 
 ### Deployment Information
-- **Frontend**: Can be deployed to static hosting services (Netlify, Vercel, GitHub Pages)
-- **Backend**: Can be deployed to Node.js hosting services (Heroku, Railway, Docker containers)
-- **Tag**: v3.0.0
+- **Unified Deployment**: Single deployment for entire application
+- **Platform**: Netlify (recommended) or Vercel
+- **Build Command**: next build
+- **Publish Directory**: .next
 
 ### API Endpoints
 ```
-GET  /health              - Health check
-GET  /api/info            - API information
-GET  /api/chains          - Supported blockchain networks
-GET  /api/test/multichain - Multi-chain service test
+GET  /api/health              - Health check
+POST /api/auth/register       - User registration
+POST /api/auth/login          - User login
+POST /api/auth/refresh        - Refresh token
 ```
 
 ### Version History
-- v3.0.0 (2025-09-17): Frontend-Backend Separation Release
-- v2.0.0 (2025-09-17): Frontend-Backend Separation Release (tag)
+- v3.0.0 (2025-09-17): Next.js Full-stack Architecture
+- v2.0.0 (2025-09-17): Frontend-Backend Separation Release
 - v1.x.x (Previous): Monolithic architecture
 
-This separation allows for independent development, deployment, and scaling of each component, providing greater flexibility and maintainability for the TriBridge platform.
+This migration to a full-stack Next.js architecture allows for simplified deployment to platforms like Netlify while maintaining all existing functionality. The unified architecture reduces complexity and operational overhead, making it easier to develop, deploy, and maintain the application.

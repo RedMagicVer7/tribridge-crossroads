@@ -13,19 +13,14 @@ TriBridge is a cutting-edge cross-border payment platform that leverages blockch
 
 ## 🏗️ Architecture
 
-TriBridge follows a **front-end and back-end separated** architecture:
+TriBridge now follows a **full-stack Next.js architecture** for simplified deployment:
 
-### Frontend (展示UI)
-- **Framework**: React + Vite + TypeScript
-- **UI Library**: ShadCN/UI + Tailwind CSS
+### Full-stack Application (Next.js)
+- **Framework**: Next.js 13+ with App Router
+- **Frontend**: React + TypeScript + Tailwind CSS + ShadCN/UI
+- **Backend**: Next.js API Routes
 - **State Management**: React Query
 - **Port**: http://localhost:3000
-
-### Backend (API服务)
-- **Framework**: Express.js + TypeScript + Socket.IO
-- **Port**: http://localhost:8000
-- **Database**: PostgreSQL + Redis
-- **Authentication**: JWT + API Key validation
 
 ### Blockchain Integration
 - **Supported Networks**: Ethereum, TRON, BSC
@@ -34,11 +29,11 @@ TriBridge follows a **front-end and back-end separated** architecture:
 
 ## 🏷️ Version Information
 
-The current version of this release is **v3.0.0**, which represents a major architectural milestone for TriBridge - the complete separation of frontend and backend components.
+The current version of this release is **v3.0.0**, which represents a major architectural milestone for TriBridge - the migration to a full-stack Next.js architecture for simplified deployment.
 
 ### Version History
-- **v3.0.0**: Frontend-Backend Separation Release (2025-09-17)
-- **v2.0.0**: Previous release with monolithic architecture
+- **v3.0.0**: Next.js Full-stack Architecture (2025-09-17)
+- **v2.0.0**: Frontend-Backend Separation Release (2025-09-17)
 
 For detailed version information, please refer to [VERSION.md](VERSION.md).
 
@@ -47,72 +42,42 @@ For detailed version information, please refer to [VERSION.md](VERSION.md).
 ### Prerequisites
 - Node.js (v18 or higher)
 - npm or yarn
-- Docker (for containerized deployment)
 
-### Frontend Setup
+### Installation
 
 ```bash
 cd tribridge-crossroads
 npm install
+```
+
+### Development
+
+```bash
+# Start development server
 npm run dev
 # Visit: http://localhost:3000
 ```
 
-### Backend Setup
-
-```bash
-cd backend
-npm install
-npm run build
-npm start
-# API: http://localhost:8000
-```
-
 ### Environment Configuration
 
-Create a `.env` file in the project root directory with the following variables:
+Create a `.env.local` file in the project root directory with the following variables:
 
 ```env
 # Development Environment Variables
-NODE_ENV=development
-VITE_API_URL=http://localhost:8000
-
-# Blockchain Configuration (testnet)
-VITE_ETH_RPC_URL=https://sepolia.infura.io/v3/your_infura_project_id
-VITE_TRON_RPC_URL=https://api.nileex.io
-VITE_BSC_RPC_URL=https://data-seed-prebsc-1-s1.binance.org:8545
+JWT_SECRET=your-super-secure-jwt-secret-here-min-32-chars
 ```
 
-For production deployment, use `.env.production` with appropriate values.
+For production deployment, use appropriate environment variables in your deployment platform.
 
 ## 🛠️ API Endpoints
 
-### Health & Info
-- `GET /health` - Health check
-- `GET /api/docs` - API documentation
+### Health Check
+- `GET /api/health` - Health check
 
 ### Authentication
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 - `POST /api/auth/refresh` - Refresh token
-
-### User Management
-- `GET /api/user/profile` - Get user profile
-- `PUT /api/user/profile` - Update user profile
-
-### KYC Services
-- `POST /api/kyc/submit` - Submit KYC verification
-- `GET /api/kyc/status` - Check KYC status
-
-### Transactions
-- `POST /api/transactions/preview` - Preview transaction
-- `POST /api/transactions/execute` - Execute transaction
-- `GET /api/transactions/history` - Transaction history
-
-### Blockchain
-- `GET /api/blockchain/chains` - Supported chains
-- `GET /api/blockchain/balance` - Token balance
-- `GET /api/blockchain/rates` - Exchange rates
 
 ## 🧪 Testing
 
@@ -131,60 +96,22 @@ npm run test:ui
 
 Frontend tests use Vitest with JSDOM environment. Test files are located in `src/services/__tests__/`.
 
-### Backend Testing
-
-```bash
-# Run backend tests
-cd backend
-npm test
-
-# Run backend tests in watch mode
-npm run test:watch
-
-# Run backend tests with coverage
-npm run test:coverage
-```
-
-Backend tests use Jest with Node.js environment. Test files are located in `backend/src/services/__tests__/`.
-
 ## 🐳 Deployment
 
-### Docker Deployment
+### Netlify Deployment (Recommended)
 
 ```bash
-# Build and run with Docker
-npm run docker:build
-npm run docker:run
-
-# Or use Docker Compose
-npm run docker:compose
-```
-
-### Cloud Deployment
-
-```bash
-# Deploy to GitHub Pages
-npm run deploy:github
-
-# Deploy to Vercel
-npm run deploy:vercel
-
 # Deploy to Netlify
 npm run deploy:netlify
 ```
 
-Note: For Netlify deployment, the project includes a `netlify.toml` configuration file that specifies the build command and publish directory.
+The project includes a `netlify.toml` configuration file that specifies the build command and publish directory for seamless Netlify deployment.
 
-### Backend Deployment
+### Vercel Deployment
 
 ```bash
-# Deploy to Heroku
-cd backend
-npm run deploy:heroku
-
-# Deploy to Railway
-cd backend
-npm run deploy:railway
+# Deploy to Vercel
+npm run deploy:vercel
 ```
 
 ## 🔧 Development
@@ -200,46 +127,37 @@ tribridge-crossroads/
 │   ├── hooks/           # Custom hooks
 │   └── contexts/        # React contexts
 ├── public/              # Static assets
-├── backend/             # Backend API service
-│   ├── src/             # Backend source code
-│   │   ├── routes/      # API routes
-│   │   ├── services/    # Business logic
-│   │   ├── middleware/  # Express middleware
-│   │   └── utils/       # Utility functions
-│   └── prisma/          # Database schema
-├── Dockerfile           # Docker configuration
-├── docker-compose.yml   # Multi-container setup
-└── nginx.conf           # Nginx reverse proxy
+├── pages/               # Next.js pages and API routes
+│   ├── api/             # API routes
+│   └── ...              # Page components
+├── next.config.js       # Next.js configuration
+├── tsconfig.json        # TypeScript configuration
+└── netlify.toml         # Netlify deployment configuration
 ```
 
 ### Available Scripts
 
-#### Frontend
+#### Development
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
-- `npm run preview` - Preview production build
+- `npm run start` - Start production server
 - `npm run lint` - Run ESLint
 
-#### Backend
-- `npm run dev` - Start development server with nodemon
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm start` - Start production server
+#### Testing
 - `npm test` - Run tests
-- `npm run lint` - Run ESLint
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:ui` - Run tests with UI
 
 #### Deployment
-- `npm run deploy:github` - Deploy to GitHub Pages
-- `npm run deploy:vercel` - Deploy to Vercel
 - `npm run deploy:netlify` - Deploy to Netlify
-- `npm run docker:build` - Build Docker image
-- `npm run docker:compose` - Run with Docker Compose
+- `npm run deploy:vercel` - Deploy to Vercel
 
 ## 🔒 Security Features
 
 - **JWT Authentication**: Secure user sessions
 - **API Key Validation**: Service-to-service authentication
 - **Rate Limiting**: Protection against abuse
-- **Helmet.js**: Security headers
+- **Security Headers**: Next.js built-in security features
 - **CORS Configuration**: Controlled resource sharing
 - **Input Validation**: Zod schema validation
 - **Encrypted Storage**: Sensitive data encryption

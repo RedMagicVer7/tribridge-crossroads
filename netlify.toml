@@ -1,17 +1,17 @@
 [build]
-  command = "vite build"
-  publish = "dist"
+  command = "next build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
-  NEXT_PRIVATE_TARGET = ""
-  NEXT_TELEMETRY_DISABLED = "1"
 
-# 完全移除Next.js插件配置，避免Netlify误判
-# [[plugins]]
-#   package = "@netlify/plugin-nextjs"
-#   enabled = false
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
