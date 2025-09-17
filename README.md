@@ -32,6 +32,16 @@ TriBridge follows a **front-end and back-end separated** architecture:
 - **Stablecoins**: USDT, USDC, DAI, BUSD
 - **Wallet Integration**: MetaMask and other Web3 wallets
 
+## 🏷️ Version Information
+
+The current version of this release is **v3.0.0**, which represents a major architectural milestone for TriBridge - the complete separation of frontend and backend components.
+
+### Version History
+- **v3.0.0**: Frontend-Backend Separation Release (2025-09-17)
+- **v2.0.0**: Previous release with monolithic architecture
+
+For detailed version information, please refer to [VERSION.md](VERSION.md).
+
 ## 🚀 Quick Start
 
 ### Prerequisites
