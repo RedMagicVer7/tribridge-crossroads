@@ -1,10 +1,10 @@
 import TransactionHistory from "../components/Transactions/TransactionHistory";
-import Header from "../components/Layout/Header";
+import SiteNavigation from "../components/Layout/SiteNavigation";
 
 const TransactionsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Header />
+      <SiteNavigation />
       
       <main className="container mx-auto py-8">
         <TransactionHistory />

@@ -1,10 +1,10 @@
 import RiskMonitoring from "../components/Risk/RiskMonitoring";
-import Header from "../components/Layout/Header";
+import SiteNavigation from "../components/Layout/SiteNavigation";
 
 const RiskPage = () => {
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Header />
+      <SiteNavigation />
       
       <main className="container mx-auto py-8">
         <RiskMonitoring />

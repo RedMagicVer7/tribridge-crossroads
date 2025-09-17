@@ -1,4 +1,4 @@
-import Header from "../components/Layout/Header";
+import SiteNavigation from "../components/Layout/SiteNavigation";
 import StatsCards from "../components/Dashboard/StatsCards";
 import CurrencyExchange from "../components/Exchange/CurrencyExchange";
 import RecentTransactions from "../components/Dashboard/RecentTransactions";
@@ -6,7 +6,7 @@ import RecentTransactions from "../components/Dashboard/RecentTransactions";
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Header />
+      <SiteNavigation />
       
       <main className="container mx-auto py-8 space-y-8">
         {/* Hero Section */}

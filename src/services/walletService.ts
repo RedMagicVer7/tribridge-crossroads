@@ -1,5 +1,4 @@
 import { ethers, BrowserProvider, formatUnits, parseUnits } from 'ethers'
-import { useAccount, useConnect, useDisconnect, usePublicClient, useWalletClient } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
 
 // Extend Window interface to include ethereum

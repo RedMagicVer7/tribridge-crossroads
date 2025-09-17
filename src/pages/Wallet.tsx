@@ -1,10 +1,10 @@
 import WalletManagement from "../components/Wallet/WalletManagement";
-import Header from "../components/Layout/Header";
+import SiteNavigation from "../components/Layout/SiteNavigation";
 
 const WalletPage = () => {
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Header />
+      <SiteNavigation />
       
       <main className="container mx-auto py-8">
         <WalletManagement />

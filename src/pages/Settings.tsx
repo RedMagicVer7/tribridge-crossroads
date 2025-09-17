@@ -22,7 +22,7 @@ import {
   EyeOff
 } from "lucide-react";
 import { useToast } from "../hooks/use-toast";
-import Header from "../components/Layout/Header";
+import SiteNavigation from "../components/Layout/SiteNavigation";
 
 interface UserSettings {
   profile: {
@@ -89,7 +89,7 @@ const SettingsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <Header />
+      <SiteNavigation />
       
       <main className="container mx-auto py-8 max-w-4xl">
         <div className="mb-8">
