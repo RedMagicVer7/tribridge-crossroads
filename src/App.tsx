@@ -17,16 +17,20 @@ import RiskPage from "./pages/Risk";
 
 const queryClient = new QueryClient();
 
-// 获取GitHub Pages的base路径
+// 获取正确的base路径，支持GitHub Pages和Netlify等多种部署环境
 const getBasePath = () => {
+  // Vite构建时会注入BASE_URL
   if (import.meta.env.BASE_URL) {
     return import.meta.env.BASE_URL;
   }
+  
   // GitHub Pages默认使用仓库名作为路径前缀
   if (window.location.hostname.includes('github.io')) {
     const pathParts = window.location.pathname.split('/');
     return pathParts.length > 1 ? `/${pathParts[1]}/` : '/';
   }
+  
+  // Netlify等其他平台通常部署在根路径
   return '/';
 };
 
