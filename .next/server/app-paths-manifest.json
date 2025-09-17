@@ -1,4 +1,3 @@
 {
-  "/api/wallet/transaction/route": "app/api/wallet/transaction/route.js",
-  "/api/wallet/balances/route": "app/api/wallet/balances/route.js"
+  "/_not-found/page": "app/_not-found/page.js"
 }

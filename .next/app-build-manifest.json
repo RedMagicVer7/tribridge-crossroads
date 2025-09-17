@@ -1,18 +1,9 @@
 {
   "pages": {
-    "/api/wallet/transaction/route": [
-      "static/chunks/webpack-28419d8740fc3718.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/58-05df313fff14c464.js",
-      "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/wallet/transaction/route-ef7fa7edba26f2d4.js"
-    ],
-    "/api/wallet/balances/route": [
-      "static/chunks/webpack-28419d8740fc3718.js",
-      "static/chunks/4bd1b696-c023c6e3521b1417.js",
-      "static/chunks/58-05df313fff14c464.js",
-      "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/wallet/balances/route-ef7fa7edba26f2d4.js"
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

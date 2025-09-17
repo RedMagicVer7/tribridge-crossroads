@@ -34,6 +34,7 @@ The current version of this release is **v3.0.0**, which represents a major arch
 ### Version History
 - **v3.0.0**: Next.js Full-stack Architecture (2025-09-17)
 - **v2.0.0**: Frontend-Backend Separation Release (2025-09-17)
+- **v1.0.0-nextjs**: Initial Next.js Migration (2025-09-17)
 
 For detailed version information, please refer to [VERSION.md](VERSION.md).
 
@@ -96,6 +97,24 @@ npm run test:ui
 
 Frontend tests use Vitest with JSDOM environment. Test files are located in `src/services/__tests__/`.
 
+### Backend Testing
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Run backend tests
+npm test
+
+# Run backend tests in watch mode
+npm run test:watch
+
+# Run backend tests with coverage
+npm run test:coverage
+```
+
+Backend tests use Jest with Node.js environment. Test files are located in `backend/src/services/__tests__/`.
+
 ## 🐳 Deployment
 
 ### Netlify Deployment (Recommended)
@@ -130,6 +149,13 @@ tribridge-crossroads/
 ├── pages/               # Next.js pages and API routes
 │   ├── api/             # API routes
 │   └── ...              # Page components
+├── backend/             # Backend source code
+│   ├── src/             # Backend source code
+│   │   ├── middleware/  # Express middleware
+│   │   ├── routes/      # API routes
+│   │   ├── services/    # Business logic
+│   │   └── utils/       # Utility functions
+│   └── ...
 ├── next.config.js       # Next.js configuration
 ├── tsconfig.json        # TypeScript configuration
 └── netlify.toml         # Netlify deployment configuration

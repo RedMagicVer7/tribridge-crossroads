@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { User, Edit, Shield, Wallet } from "lucide-react"
-import { Link } from "react-router-dom"
 
 interface ProfilePreviewProps {
   compact?: boolean
@@ -55,11 +54,13 @@ export function ProfilePreview({ compact = false }: ProfilePreviewProps) {
                 )}
               </div>
             </div>
-            <Link to="/profile">
-              <Button variant="ghost" size="sm">
-                <Edit className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => window.location.href = '/profile'}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -74,12 +75,14 @@ export function ProfilePreview({ compact = false }: ProfilePreviewProps) {
             <User className="h-5 w-5" />
             个人信息
           </span>
-          <Link to="/profile">
-            <Button variant="outline" size="sm">
-              <Edit className="h-4 w-4 mr-2" />
-              查看详情
-            </Button>
-          </Link>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => window.location.href = '/profile'}
+          >
+            <Edit className="h-4 w-4 mr-2" />
+            查看详情
+          </Button>
         </CardTitle>
       </CardHeader>
       <CardContent>

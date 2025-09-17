@@ -3,10 +3,8 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { ArrowUpRight, ArrowDownLeft, Clock, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const RecentTransactions = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
   
@@ -135,7 +133,7 @@ const RecentTransactions = () => {
             variant="ghost" 
             size="sm" 
             className="text-primary hover:text-primary-hover"
-            onClick={() => navigate('/transactions')}
+            onClick={() => window.location.href = '/transactions'}
           >
             View All
             <ArrowUpRight className="h-4 w-4 ml-1" />

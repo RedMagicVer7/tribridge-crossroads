@@ -20,7 +20,6 @@ import {
   CreditCard,
   Globe
 } from "lucide-react"
-import { Link } from "react-router-dom"
 
 interface UserProfileProps {
   user?: {
@@ -76,12 +75,14 @@ export function UserProfile({ user }: UserProfileProps) {
               <User className="h-5 w-5" />
               用户资料
             </CardTitle>
-            <Link to="/settings">
-              <Button variant="outline" size="sm">
-                <Edit className="h-4 w-4 mr-2" />
-                编辑资料
-              </Button>
-            </Link>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.location.href = '/settings'}
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              编辑资料
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -173,11 +174,14 @@ export function UserProfile({ user }: UserProfileProps) {
                 <Badge className="bg-green-500 text-white">已验证</Badge>
               </div>
             </div>
-            <Link to="/settings?tab=security" className="block mt-4">
-              <Button variant="outline" size="sm" className="w-full">
-                安全设置
-              </Button>
-            </Link>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full mt-4"
+              onClick={() => window.location.href = '/settings?tab=security'}
+            >
+              安全设置
+            </Button>
           </CardContent>
         </Card>
 
@@ -198,98 +202,47 @@ export function UserProfile({ user }: UserProfileProps) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">支持网络</span>
-                <span className="text-xs text-muted-foreground">ETH, USDC, DAI</span>
+                <div className="flex gap-1">
+                  <Badge variant="outline">Ethereum</Badge>
+                  <Badge variant="outline">BSC</Badge>
+                  <Badge variant="outline">Polygon</Badge>
+                </div>
               </div>
             </div>
-            <Link to="/wallet" className="block mt-4">
-              <Button variant="outline" size="sm" className="w-full">
-                <CreditCard className="h-3 w-3 mr-2" />
-                钱包管理
-              </Button>
-            </Link>
+            <Button variant="outline" size="sm" className="w-full mt-4">
+              钱包管理
+            </Button>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Globe className="h-4 w-4" />
-              偏好设置
+              <CreditCard className="h-4 w-4" />
+              会员权益
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm">语言</span>
-                <span className="text-sm font-medium">简体中文</span>
+                <span className="text-sm">账户等级</span>
+                <Badge className="bg-purple-500 text-white">Premium</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">货币</span>
-                <span className="text-sm font-medium">USD</span>
+                <span className="text-sm">交易手续费</span>
+                <Badge variant="outline">0.1%</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">时区</span>
-                <span className="text-sm font-medium">UTC+8</span>
+                <span className="text-sm">提现限额</span>
+                <span className="text-sm font-medium">无限制</span>
               </div>
             </div>
-            <Link to="/settings?tab=preferences" className="block mt-4">
-              <Button variant="outline" size="sm" className="w-full">
-                偏好设置
-              </Button>
-            </Link>
+            <Button variant="outline" size="sm" className="w-full mt-4">
+              升级会员
+            </Button>
           </CardContent>
         </Card>
       </div>
-
-      {/* 最近活动 */}
-      <Card>
-        <CardHeader>
-          <CardTitle>最近活动</CardTitle>
-          <CardDescription>您最近的账户活动记录</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between py-2 border-b">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium">成功完成USDC转账</p>
-                  <p className="text-xs text-muted-foreground">2分钟前</p>
-                </div>
-              </div>
-              <Badge variant="outline">交易</Badge>
-            </div>
-            
-            <div className="flex items-center justify-between py-2 border-b">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium">更新了个人资料</p>
-                  <p className="text-xs text-muted-foreground">1小时前</p>
-                </div>
-              </div>
-              <Badge variant="outline">设置</Badge>
-            </div>
-            
-            <div className="flex items-center justify-between py-2">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <div>
-                  <p className="text-sm font-medium">连接了新钱包</p>
-                  <p className="text-xs text-muted-foreground">昨天</p>
-                </div>
-              </div>
-              <Badge variant="outline">安全</Badge>
-            </div>
-          </div>
-          
-          <Link to="/analytics" className="block mt-4">
-            <Button variant="ghost" className="w-full">
-              查看完整活动记录
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
     </div>
   )
 }
