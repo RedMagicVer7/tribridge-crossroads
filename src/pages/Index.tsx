@@ -1,7 +1,8 @@
-import Header from "../components/Layout/Header";
-import StatsCards from "../components/Dashboard/StatsCards";
+import React from 'react';
 import CurrencyExchange from "../components/Exchange/CurrencyExchange";
 import RecentTransactions from "../components/Dashboard/RecentTransactions";
+import Header from "../components/Layout/Header";
+import StatsCards from "../components/Dashboard/StatsCards";
 
 const Index = () => {
   return (

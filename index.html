@@ -28,6 +28,26 @@
           history.replaceState(null, '', redirectPath);
         }
       })();
+
+      // Debugging code to check if React is working
+      console.log('Page loaded at:', new Date().toISOString());
+      console.log('Document object:', document);
+      console.log('Root element exists:', !!document.getElementById('root'));
+      
+      // Set up a simple check to see if React is rendering
+      window.checkReactRendering = function() {
+        const rootElement = document.getElementById('root');
+        if (rootElement && rootElement.children.length > 0) {
+          console.log('✅ React has rendered content into the root element!');
+          return true;
+        } else {
+          console.log('❌ React has not rendered content into the root element.');
+          return false;
+        }
+      };
+      
+      // Run the check after a short delay to give React time to render
+      setTimeout(window.checkReactRendering, 1000);
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>

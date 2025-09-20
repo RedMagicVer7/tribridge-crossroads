@@ -14,6 +14,8 @@ import TransactionsPage from "./pages/Transactions";
 import SettingsPage from "./pages/Settings";
 import ProfilePage from "./pages/Profile";
 import RiskPage from "./pages/Risk";
+import TestPage from "./pages/TestPage";
+import DebugPage from "./pages/DebugPage";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +43,6 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TranslationProvider>
         <TooltipProvider>
-          <Toaster />
           <Sonner />
           <BrowserRouter 
             basename={basename}
@@ -60,6 +61,8 @@ const App = () => {
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/risk" element={<RiskPage />} />
+              <Route path="/test" element={<TestPage />} />
+              <Route path="/debug" element={<DebugPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

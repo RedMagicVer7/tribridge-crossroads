@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriBridge 稳定币跨境支付平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-2">
+                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span class="text-xl font-bold text-gray-900">TriBridge</span>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="showTab('dashboard')" id="btn-dashboard" class="px-3 py-2 rounded-md text-sm font-medium bg-blue-100 text-blue-700">仪表板</button>
+                    <button onclick="showTab('otc')" id="btn-otc" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">OTC交易</button>
+                    <button onclick="showTab('pools')" id="btn-pools" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">资金池</button>
+                    <button onclick="showTab('compliance')" id="btn-compliance" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">合规检查</button>
+                    <button onclick="showTab('brics')" id="btn-brics" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">BRICS</button>
+                    <button onclick="showTab('services')" id="btn-services" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">增值服务</button>
+                    <button onclick="showTab('wallet')" id="btn-wallet" class="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">钱包</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                TriBridge 稳定币跨境支付平台
+            </h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                基于区块链技术的跨境支付解决方案，支持CNY、RUB、USD多币种转换，提供OTC交易、资金池管理、合规检查、BRICS稳定币和增值服务
+            </p>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="tab-dashboard" class="space-y-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">总交易量</p>
+                            <p class="text-2xl font-bold">$2.8M</p>
+                            <p class="text-sm text-green-600">+12.5%</p>
+                        </div>
+                        <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">活跃用户</p>
+                            <p class="text-2xl font-bold">1,247</p>
+                            <p class="text-sm text-green-600">+8.1%</p>
+                        </div>
+                        <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">合规检查</p>
+                            <p class="text-2xl font-bold">1,089</p>
+                            <p class="text-sm text-green-600">通过率 98.8%</p>
+                        </div>
+                        <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">BRICS市值</p>
+                            <p class="text-2xl font-bold">$41.39B</p>
+                            <p class="text-sm text-green-600">+5.2%</p>
+                        </div>
+                        <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg border shadow-sm">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold">最近交易</h3>
+                        <p class="text-sm text-gray-500">实时OTC交易动态</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 border rounded-lg">
+                                <div>
+                                    <p class="font-medium">CNY/USDT</p>
+                                    <p class="text-sm text-gray-500">金额: 50,000</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-medium">7.20</p>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">已完成</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 border rounded-lg">
+                                <div>
+                                    <p class="font-medium">BCNY/BRUB</p>
+                                    <p class="text-sm text-gray-500">金额: 10,000</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-medium">12.85</p>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">处理中</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border shadow-sm">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold">系统状态</h3>
+                        <p class="text-sm text-gray-500">各系统运行状态</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">OTC交易系统</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">正常</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">合规检查系统</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">正常</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">BRICS支付网络</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">正常</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">增值服务</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">正常</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OTC Tab -->
+        <div id="tab-otc" class="hidden">
+            <div class="bg-white rounded-lg border shadow-sm">
+                <div class="p-6 border-b">
+                    <h3 class="text-lg font-semibold">OTC交易市场</h3>
+                    <p class="text-sm text-gray-500">P2P数字货币交易平台</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">买入订单</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 border rounded">
+                                    <div>
+                                        <p class="font-medium">USDT/CNY</p>
+                                        <p class="text-sm text-gray-500">数量: 10,000 USDT</p>
+                                        <p class="text-sm text-gray-500">信用评分: 850</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-green-600">7.18</p>
+                                        <button class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">交易</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center p-3 border rounded">
+                                    <div>
+                                        <p class="font-medium">BTC/USDT</p>
+                                        <p class="text-sm text-gray-500">数量: 0.5 BTC</p>
+                                        <p class="text-sm text-gray-500">信用评分: 920</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-green-600">42,500</p>
+                                        <button class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">交易</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">卖出订单</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 border rounded">
+                                    <div>
+                                        <p class="font-medium">CNY/USDT</p>
+                                        <p class="text-sm text-gray-500">数量: 72,000 CNY</p>
+                                        <p class="text-sm text-gray-500">信用评分: 780</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-red-600">7.22</p>
+                                        <button class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">交易</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pools Tab -->
+        <div id="tab-pools" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-semibold">USDT稳定池</h4>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">低风险</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">年化收益率</span>
+                                <span class="font-semibold text-green-600">8.5%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">总锁定价值</span>
+                                <span class="font-semibold">$500K</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">参与者</span>
+                                <span class="font-semibold">89</span>
+                            </div>
+                        </div>
+                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">投资</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-semibold">ETH收益池</h4>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">中风险</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">年化收益率</span>
+                                <span class="font-semibold text-green-600">12.3%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">总锁定价值</span>
+                                <span class="font-semibold">$320K</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">参与者</span>
+                                <span class="font-semibold">156</span>
+                            </div>
+                        </div>
+                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">投资</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border shadow-sm p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-semibold">BTC增长池</h4>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">高风险</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">年化收益率</span>
+                                <span class="font-semibold text-green-600">18.7%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">总锁定价值</span>
+                                <span class="font-semibold">$1.2M</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">参与者</span>
+                                <span class="font-semibold">234</span>
+                            </div>
+                        </div>
+                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">投资</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliance Tab -->
+        <div id="tab-compliance" class="hidden">
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">总检查数</p>
+                            <p class="text-2xl font-bold">1,247</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">已通过</p>
+                            <p class="text-2xl font-bold text-green-600">1,089</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">需审查</p>
+                            <p class="text-2xl font-bold text-orange-600">87</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">已拒绝</p>
+                            <p class="text-2xl font-bold text-red-600">48</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border shadow-sm">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold">制裁名单管理</h3>
+                        <p class="text-sm text-gray-500">监控OFAC、EU、UN等国际制裁清单</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-center p-4 border rounded-lg">
+                                <p class="font-medium">OFAC</p>
+                                <p class="text-sm text-gray-600">美国财政部制裁名单</p>
+                                <p class="text-sm">最后更新: 2024-01-15</p>
+                            </div>
+                            <div class="text-center p-4 border rounded-lg">
+                                <p class="font-medium">EU Sanctions</p>
+                                <p class="text-sm text-gray-600">欧盟制裁名单</p>
+                                <p class="text-sm">最后更新: 2024-01-14</p>
+                            </div>
+                            <div class="text-center p-4 border rounded-lg">
+                                <p class="font-medium">UN Sanctions</p>
+                                <p class="text-sm text-gray-600">联合国制裁名单</p>
+                                <p class="text-sm">最后更新: 2024-01-13</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRICS Tab -->
+        <div id="tab-brics" class="hidden">
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">总市值</p>
+                            <p class="text-2xl font-bold">$41.39B</p>
+                            <p class="text-sm text-green-600">+5.2%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">24h交易量</p>
+                            <p class="text-2xl font-bold">$2.8B</p>
+                            <p class="text-sm text-blue-600">+12.8%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">活跃用户</p>
+                            <p class="text-2xl font-bold">1.2M</p>
+                            <p class="text-sm text-purple-600">+8.5%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">支持国家</p>
+                            <p class="text-2xl font-bold">5</p>
+                            <p class="text-sm text-orange-600">BRICS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border shadow-sm">
+                    <div class="p-6 border-b">
+                        <h3 class="text-lg font-semibold">BRICS稳定币</h3>
+                        <p class="text-sm text-gray-500">基于BRICS国家法定货币的数字稳定币</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center space-x-3 mb-4">
+                                    <div class="text-2xl">🇨🇳</div>
+                                    <div>
+                                        <h4 class="font-bold">BCNY</h4>
+                                        <p class="text-sm text-gray-600">BRICS Digital Yuan</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">市值:</span>
+                                        <span class="text-sm font-medium">$4.45B</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">汇率 (USD):</span>
+                                        <span class="text-sm font-medium">$0.1389</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center space-x-3 mb-4">
+                                    <div class="text-2xl">🇷🇺</div>
+                                    <div>
+                                        <h4 class="font-bold">BRUB</h4>
+                                        <p class="text-sm text-gray-600">BRICS Digital Ruble</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">市值:</span>
+                                        <span class="text-sm font-medium">$12.96B</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">汇率 (USD):</span>
+                                        <span class="text-sm font-medium">$0.0108</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg p-4">
+                                <div class="flex items-center space-x-3 mb-4">
+                                    <div class="text-2xl">🌐</div>
+                                    <div>
+                                        <h4 class="font-bold">BRICS</h4>
+                                        <p class="text-sm text-gray-600">Unified Stablecoin</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">市值:</span>
+                                        <span class="text-sm font-medium">$5.00B</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">汇率 (USD):</span>
+                                        <span class="text-sm font-medium">$1.0000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Tab -->
+        <div id="tab-services" class="hidden">
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">活跃汇率锁定</p>
+                            <p class="text-2xl font-bold">1</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">信用评分</p>
+                            <p class="text-2xl font-bold text-green-600">750</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">忠诚度等级</p>
+                            <p class="text-lg font-bold capitalize">Gold</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border shadow-sm p-6">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">忠诚度积分</p>
+                            <p class="text-2xl font-bold">12,500</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg border shadow-sm">
+                        <div class="p-6 border-b">
+                            <h3 class="text-lg font-semibold">汇率锁定服务</h3>
+                            <p class="text-sm text-gray-500">锁定当前汇率，避免汇率波动风险</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">从货币</label>
+                                        <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                            <option>USDT</option>
+                                            <option>BTC</option>
+                                            <option>ETH</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">到货币</label>
+                                        <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                            <option>CNY</option>
+                                            <option>USD</option>
+                                            <option>EUR</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">锁定金额</label>
+                                    <input type="number" placeholder="输入锁定金额" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                </div>
+                                <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">创建汇率锁定</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg border shadow-sm">
+                        <div class="p-6 border-b">
+                            <h3 class="text-lg font-semibold">信用管理</h3>
+                            <p class="text-sm text-gray-500">管理您的信用额度和支付历史</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-center p-6 border rounded-lg mb-4">
+                                <div class="text-4xl font-bold mb-2 text-green-600">750</div>
+                                <div class="text-sm text-gray-600">信用评分 (满分1000)</div>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2">低风险</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">总额度:</span>
+                                    <span class="font-medium">$100,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">已使用:</span>
+                                    <span class="font-medium">$25,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">可用额度:</span>
+                                    <span class="font-medium text-green-600">$75,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Tab -->
+        <div id="tab-wallet" class="hidden">
+            <div class="bg-white rounded-lg border shadow-sm">
+                <div class="p-6 border-b">
+                    <h3 class="text-lg font-semibold">多链钱包管理</h3>
+                    <p class="text-sm text-gray-500">支持以太坊、TRON、BSC等多链资产</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="text-center">
+                                <h4 class="font-semibold">以太坊</h4>
+                                <p class="text-2xl font-bold mt-2">1.5 ETH</p>
+                                <p class="text-sm text-gray-500">≈ $3,675 USD</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="text-center">
+                                <h4 class="font-semibold">TRON</h4>
+                                <p class="text-2xl font-bold mt-2">15,000 TRX</p>
+                                <p class="text-sm text-gray-500">≈ $1,650 USD</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="text-center">
+                                <h4 class="font-semibold">BSC</h4>
+                                <p class="text-2xl font-bold mt-2">2.8 BNB</p>
+                                <p class="text-sm text-gray-500">≈ $980 USD</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            ['dashboard', 'otc', 'pools', 'compliance', 'brics', 'services', 'wallet'].forEach(tab => {
+                document.getElementById('tab-' + tab).classList.add('hidden');
+                document.getElementById('btn-' + tab).className = 'px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700';
+            });
+            
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            document.getElementById('btn-' + tabName).className = 'px-3 py-2 rounded-md text-sm font-medium bg-blue-100 text-blue-700';
+        }
+    </script>
+</body>
+</html>
