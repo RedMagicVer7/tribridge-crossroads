@@ -175,12 +175,12 @@ graph TB
 ## API路由架构图
 
 ```mermaid
-flowchart TB
+graph TB
     subgraph "Next.js API路由"
-        API[/api/]
-        API --> AUTH[/api/auth/]
-        API --> HEALTH[/api/health/]
-        API --> WALLET[/api/wallet/]
+        API[/api]
+        API --> AUTH[/api/auth]
+        API --> HEALTH[/api/health]
+        API --> WALLET[/api/wallet]
     end
 
     subgraph "认证路由"
@@ -213,7 +213,6 @@ flowchart TB
     TRANSACTION --> S3
     S2 --> S4
     S3 --> S5
-
 ```
 
 ## 数据流图
