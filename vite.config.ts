@@ -14,8 +14,17 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: 3000,
+      // 允许访问index-test.html
+      proxy: {
+        '/index-test.html': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/index-test\.html/, '/index-test.html'),
+        },
+      },
     },
     plugins: [react()],
+
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

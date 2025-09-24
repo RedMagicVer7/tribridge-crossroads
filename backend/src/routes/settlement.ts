@@ -1,409 +1,459 @@
-import { Router, Request, Response } from 'express'
+import express from 'express';
+import { body, param, query, validationResult } from 'express-validator';
+import { authMiddleware } from '../middleware/auth.js';
+import settlementService, { SettlementType, SettlementNetwork, SettlementStatus } from '../services/settlementService.js';
 
-const router = Router()
+const router = express.Router();
 
-// 创建清算订单
-router.post('/orders', async (req: Request, res: Response) => {
+// 验证中间件
+const validateRequest = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      error: 'Validation failed',
+      details: errors.array()
+    });
+  }
+  next();
+};
+
+/**
+ * 创建清算订单
+ */
+router.post('/orders', [
+  authMiddleware,
+  body('type').isIn(Object.values(SettlementType)),
+  body('sourceAmount').isFloat({ min: 1 }),
+  body('sourceCurrency').isString().isLength({ min: 3, max: 4 }),
+  body('targetCurrency').isString().isLength({ min: 3, max: 4 }),
+  body('preferredNetwork').optional().isIn(Object.values(SettlementNetwork)),
+  body('escrowOrderId').optional().isInt({ min: 1 }),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
   try {
-    const {
-      fromChain,
-      toChain,
-      fromToken,
-      toToken,
-      amount,
-      fromAddress,
-      toAddress,
-      slippage = 0.5
-    } = req.body
-    const userId = req.user?.userId
-
+    const userId = req.user?.userId;
     if (!userId) {
-      return res.status(401).json({ 
-        success: false, 
-        error: '未授权访问' 
-      })
-    }
-
-    if (!fromChain || !toChain || !fromToken || !toToken || !amount || !fromAddress || !toAddress) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        error: '缺少必要的清算参数'
-      })
+        error: 'User not authenticated'
+      });
     }
 
-    // 创建清算订单
-    const settlementOrder = {
-      id: Date.now().toString(),
-      userId,
-      type: 'cross_chain_settlement',
-      status: 'pending',
-      fromChain,
-      toChain,
-      fromToken,
-      toToken,
-      amount,
-      fromAddress,
-      toAddress,
-      slippage,
-      exchangeRate: '1.0',
-      estimatedFee: '0.002',
-      estimatedTime: '5-15 minutes',
-      createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30分钟过期
-      steps: [
-        {
-          step: 1,
-          action: 'lock_source_tokens',
-          status: 'pending',
-          description: `锁定 ${amount} ${fromToken} 在 ${fromChain} 链上`
-        },
-        {
-          step: 2,
-          action: 'verify_lock',
-          status: 'pending',
-          description: '验证代币锁定状态'
-        },
-        {
-          step: 3,
-          action: 'mint_target_tokens',
-          status: 'pending',
-          description: `在 ${toChain} 链上铸造 ${toToken}`
-        },
-        {
-          step: 4,
-          action: 'transfer_to_recipient',
-          status: 'pending',
-          description: `转账到目标地址 ${toAddress}`
-        }
-      ]
-    }
-
-    // TODO: 保存到数据库并启动清算流程
-
+    const order = await settlementService.createSettlementOrder(userId, req.body);
+    
     res.status(201).json({
       success: true,
-      data: settlementOrder,
+      data: order,
       message: '清算订单创建成功'
-    })
+    });
   } catch (error) {
-    console.error('创建清算订单错误:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: '服务器内部错误' 
-    })
+    console.error('Create settlement order error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
   }
-})
+});
 
-// 获取清算订单列表
-router.get('/orders', async (req: Request, res: Response) => {
+/**
+ * 执行清算
+ */
+router.post('/orders/:orderId/execute', [
+  authMiddleware,
+  param('orderId').isString(),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
   try {
-    const userId = req.user?.userId
-    const { page = 1, limit = 20, status, type } = req.query
-
+    const userId = req.user?.userId;
+    const { orderId } = req.params;
+    
     if (!userId) {
-      return res.status(401).json({ 
-        success: false, 
-        error: '未授权访问' 
-      })
+      return res.status(401).json({
+        success: false,
+        error: 'User not authenticated'
+      });
     }
 
-    // TODO: 从数据库查询清算订单
-    const orders = [
-      {
-        id: '1',
-        type: 'cross_chain_settlement',
-        status: 'completed',
-        fromChain: 'ethereum',
-        toChain: 'tron',
-        fromToken: 'USDT',
-        toToken: 'USDT',
-        amount: '1000',
-        fromAddress: '0x742d35Cc6648C8532C2B41F398999930894B6Af8',
-        toAddress: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
-        exchangeRate: '1.0',
-        actualFee: '0.002',
-        createdAt: '2024-01-01T00:00:00.000Z',
-        completedAt: '2024-01-01T00:15:00.000Z'
-      },
-      {
-        id: '2',
-        type: 'cross_chain_settlement',
-        status: 'processing',
-        fromChain: 'bsc',
-        toChain: 'ethereum',
-        fromToken: 'USDC',
-        toToken: 'USDC',
-        amount: '500',
-        fromAddress: '0x8ba1f109551bD432803012645Hac136c',
-        toAddress: '0x742d35Cc6648C8532C2B41F398999930894B6Af8',
-        exchangeRate: '1.0',
-        estimatedFee: '0.003',
-        createdAt: '2024-01-02T00:00:00.000Z'
-      }
-    ]
+    // 验证订单所有权
+    const order = settlementService.getSettlementOrder(orderId);
+    if (!order || order.userId !== userId) {
+      return res.status(404).json({
+        success: false,
+        error: '清算订单不存在或无权限'
+      });
+    }
 
-    const filteredOrders = orders.filter(order => {
-      if (status && order.status !== status) return false
-      if (type && order.type !== type) return false
-      return true
-    })
+    const executedOrder = await settlementService.executeSettlement(orderId);
+    
+    res.json({
+      success: true,
+      data: executedOrder,
+      message: '清算执行成功'
+    });
+  } catch (error) {
+    console.error('Execute settlement error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
+  }
+});
 
-    const total = filteredOrders.length
-    const pageSize = Number(limit)
-    const currentPage = Number(page)
-    const startIndex = (currentPage - 1) * pageSize
-    const paginatedOrders = filteredOrders.slice(startIndex, startIndex + pageSize)
+/**
+ * B2B清算请求
+ */
+router.post('/b2b', [
+  authMiddleware,
+  body('buyerCompany.name').isString().isLength({ min: 2, max: 200 }),
+  body('buyerCompany.country').isString().isLength({ min: 2, max: 50 }),
+  body('buyerCompany.bankAccount').isString().isLength({ min: 10, max: 50 }),
+  body('sellerCompany.name').isString().isLength({ min: 2, max: 200 }),
+  body('sellerCompany.country').isString().isLength({ min: 2, max: 50 }),
+  body('sellerCompany.bankAccount').isString().isLength({ min: 10, max: 50 }),
+  body('tradingDetails.contractNumber').isString().isLength({ min: 5, max: 50 }),
+  body('tradingDetails.goodsDescription').isString().isLength({ min: 10, max: 500 }),
+  body('tradingDetails.totalValue').isFloat({ min: 1000 }),
+  body('tradingDetails.currency').isString().isLength({ min: 3, max: 4 }),
+  body('tradingDetails.terms').isIn(['FOB', 'CIF', 'EXW', 'DDP']),
+  body('settlementPreference.preferredNetwork').isIn(Object.values(SettlementNetwork)),
+  body('settlementPreference.maxProcessingTime').isInt({ min: 1, max: 1440 }),
+  body('settlementPreference.maxFeePercentage').isFloat({ min: 0, max: 5 }),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'User not authenticated'
+      });
+    }
 
+    const order = await settlementService.processB2BSettlement(req.body);
+    
+    res.status(201).json({
+      success: true,
+      data: order,
+      message: 'B2B清算请求创建成功'
+    });
+  } catch (error) {
+    console.error('B2B settlement error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
+  }
+});
+
+/**
+ * 获取清算订单详情
+ */
+router.get('/orders/:orderId', [
+  authMiddleware,
+  param('orderId').isString(),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
+  try {
+    const userId = req.user?.userId;
+    const { orderId } = req.params;
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'User not authenticated'
+      });
+    }
+
+    const order = settlementService.getSettlementOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: '清算订单不存在'
+      });
+    }
+
+    // 检查权限
+    if (order.userId !== userId) {
+      return res.status(403).json({
+        success: false,
+        error: '无权限访问此订单'
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: order
+    });
+  } catch (error) {
+    console.error('Get settlement order error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
+  }
+});
+
+/**
+ * 获取用户清算订单列表
+ */
+router.get('/orders', [
+  authMiddleware,
+  query('status').optional().isIn(Object.values(SettlementStatus)),
+  query('type').optional().isIn(Object.values(SettlementType)),
+  query('page').optional().isInt({ min: 1 }),
+  query('limit').optional().isInt({ min: 1, max: 100 }),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
+  try {
+    const userId = req.user?.userId;
+    const { status, type, page = 1, limit = 20 } = req.query;
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'User not authenticated'
+      });
+    }
+
+    let orders = settlementService.getUserSettlementOrders(userId);
+    
+    // 过滤条件
+    if (status) {
+      orders = orders.filter(order => order.status === status);
+    }
+    if (type) {
+      orders = orders.filter(order => order.type === type);
+    }
+    
+    // 按创建时间倒序排列
+    orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    
+    // 分页
+    const startIndex = (Number(page) - 1) * Number(limit);
+    const endIndex = startIndex + Number(limit);
+    const paginatedOrders = orders.slice(startIndex, endIndex);
+    
     res.json({
       success: true,
       data: {
         orders: paginatedOrders,
         pagination: {
-          page: currentPage,
-          limit: pageSize,
-          total,
-          totalPages: Math.ceil(total / pageSize)
+          page: Number(page),
+          limit: Number(limit),
+          total: orders.length,
+          totalPages: Math.ceil(orders.length / Number(limit))
         }
       }
-    })
+    });
   } catch (error) {
-    console.error('获取清算订单列表错误:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: '服务器内部错误' 
-    })
+    console.error('Get user settlement orders error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
   }
-})
+});
 
-// 获取清算订单详情
-router.get('/orders/:orderId', async (req: Request, res: Response) => {
+/**
+ * 取消清算订单
+ */
+router.put('/orders/:orderId/cancel', [
+  authMiddleware,
+  param('orderId').isString(),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
   try {
-    const { orderId } = req.params
-    const userId = req.user?.userId
-
+    const userId = req.user?.userId;
+    const { orderId } = req.params;
+    
     if (!userId) {
-      return res.status(401).json({ 
-        success: false, 
-        error: '未授权访问' 
-      })
+      return res.status(401).json({
+        success: false,
+        error: 'User not authenticated'
+      });
     }
 
-    // TODO: 从数据库查询订单详情
-    const order = {
-      id: orderId,
-      userId,
-      type: 'cross_chain_settlement',
-      status: 'completed',
-      fromChain: 'ethereum',
-      toChain: 'tron',
-      fromToken: 'USDT',
-      toToken: 'USDT',
-      amount: '1000',
-      fromAddress: '0x742d35Cc6648C8532C2B41F398999930894B6Af8',
-      toAddress: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
-      exchangeRate: '1.0',
-      slippage: 0.5,
-      estimatedFee: '0.002',
-      actualFee: '0.002',
-      createdAt: '2024-01-01T00:00:00.000Z',
-      completedAt: '2024-01-01T00:15:00.000Z',
-      transactions: [
-        {
-          chain: 'ethereum',
-          txHash: '0x1234567890abcdef1234567890abcdef12345678',
-          type: 'lock',
-          status: 'confirmed',
-          amount: '1000',
-          timestamp: '2024-01-01T00:05:00.000Z'
-        },
-        {
-          chain: 'tron',
-          txHash: 'a1b2c3d4e5f6789012345678901234567890abcdef',
-          type: 'mint',
-          status: 'confirmed',
-          amount: '1000',
-          timestamp: '2024-01-01T00:15:00.000Z'
-        }
-      ],
-      steps: [
-        {
-          step: 1,
-          action: 'lock_source_tokens',
-          status: 'completed',
-          description: '锁定 1000 USDT 在 ethereum 链上',
-          completedAt: '2024-01-01T00:05:00.000Z',
-          txHash: '0x1234567890abcdef1234567890abcdef12345678'
-        },
-        {
-          step: 2,
-          action: 'verify_lock',
-          status: 'completed',
-          description: '验证代币锁定状态',
-          completedAt: '2024-01-01T00:08:00.000Z'
-        },
-        {
-          step: 3,
-          action: 'mint_target_tokens',
-          status: 'completed',
-          description: '在 tron 链上铸造 USDT',
-          completedAt: '2024-01-01T00:12:00.000Z',
-          txHash: 'a1b2c3d4e5f6789012345678901234567890abcdef'
-        },
-        {
-          step: 4,
-          action: 'transfer_to_recipient',
-          status: 'completed',
-          description: '转账到目标地址',
-          completedAt: '2024-01-01T00:15:00.000Z'
-        }
-      ]
-    }
-
+    await settlementService.cancelSettlement(orderId, userId);
+    
     res.json({
       success: true,
-      data: order
-    })
+      message: '清算订单已取消'
+    });
   } catch (error) {
-    console.error('获取清算订单详情错误:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: '服务器内部错误' 
-    })
+    console.error('Cancel settlement error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
   }
-})
+});
 
-// 取消清算订单
-router.post('/orders/:orderId/cancel', async (req: Request, res: Response) => {
+/**
+ * 获取境外节点列表
+ */
+router.get('/nodes', [authMiddleware], async (req: express.Request, res: express.Response) => {
   try {
-    const { orderId } = req.params
-    const userId = req.user?.userId
-
-    if (!userId) {
-      return res.status(401).json({ 
-        success: false, 
-        error: '未授权访问' 
-      })
-    }
-
-    // TODO: 检查订单状态并取消
-    // 只有pending状态的订单才能取消
-
+    const nodes = settlementService.getOffshoreNodes();
+    
     res.json({
       success: true,
-      message: '清算订单取消成功'
-    })
+      data: nodes
+    });
   } catch (error) {
-    console.error('取消清算订单错误:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: '服务器内部错误' 
-    })
+    console.error('Get offshore nodes error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
   }
-})
+});
 
-// 获取清算统计信息
-router.get('/stats', async (req: Request, res: Response) => {
+/**
+ * 获取实时汇率
+ */
+router.get('/rates', async (req: express.Request, res: express.Response) => {
   try {
-    const userId = req.user?.userId
-    const { period = '24h' } = req.query
+    const rates = settlementService.getCurrentRates();
+    
+    res.json({
+      success: true,
+      data: {
+        rates,
+        timestamp: new Date().toISOString(),
+        source: 'TriBridge Settlement Service'
+      }
+    });
+  } catch (error) {
+    console.error('Get exchange rates error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
+  }
+});
 
+/**
+ * 预估清算费用
+ */
+router.post('/estimate', [
+  body('sourceAmount').isFloat({ min: 1 }),
+  body('sourceCurrency').isString().isLength({ min: 3, max: 4 }),
+  body('targetCurrency').isString().isLength({ min: 3, max: 4 }),
+  body('preferredNetwork').optional().isIn(Object.values(SettlementNetwork)),
+  validateRequest
+], async (req: express.Request, res: express.Response) => {
+  try {
+    const { sourceAmount, sourceCurrency, targetCurrency, preferredNetwork } = req.body;
+    
+    // 创建临时清算订单用于估算
+    const tempUserId = 'estimate_user';
+    const tempOrder = await settlementService.createSettlementOrder(tempUserId, {
+      type: SettlementType.CROSS_BORDER,
+      sourceAmount,
+      sourceCurrency,
+      targetCurrency,
+      preferredNetwork
+    });
+
+    // 移除临时订单
+    // settlementService.removeOrder(tempOrder.id); // 需要实现此方法
+    
+    res.json({
+      success: true,
+      data: {
+        sourceAmount,
+        targetAmount: tempOrder.targetAmount,
+        exchangeRate: tempOrder.exchangeRate,
+        fees: tempOrder.fees,
+        estimatedTime: tempOrder.selectedNode.processingTime.average,
+        selectedNode: {
+          name: tempOrder.selectedNode.name,
+          country: tempOrder.selectedNode.country,
+          network: tempOrder.network
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Estimate settlement error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
+  }
+});
+
+/**
+ * 获取清算统计数据
+ */
+router.get('/stats', [authMiddleware], async (req: express.Request, res: express.Response) => {
+  try {
+    const userId = req.user?.userId;
     if (!userId) {
-      return res.status(401).json({ 
-        success: false, 
-        error: '未授权访问' 
-      })
+      return res.status(401).json({
+        success: false,
+        error: 'User not authenticated'
+      });
     }
 
-    // TODO: 从数据库计算统计信息
+    const orders = settlementService.getUserSettlementOrders(userId);
+    
     const stats = {
-      period,
-      totalOrders: 156,
-      completedOrders: 145,
-      failedOrders: 3,
-      pendingOrders: 8,
-      totalVolume: '2,450,000',
-      avgSettlementTime: '8.5 minutes',
-      successRate: 95.5,
-      topChains: [
-        { chain: 'ethereum', volume: '1,200,000', count: 78 },
-        { chain: 'tron', volume: '800,000', count: 52 },
-        { chain: 'bsc', volume: '450,000', count: 26 }
-      ],
-      topTokens: [
-        { token: 'USDT', volume: '1,800,000', count: 98 },
-        { token: 'USDC', volume: '500,000', count: 35 },
-        { token: 'DAI', volume: '150,000', count: 23 }
-      ]
-    }
-
+      total: orders.length,
+      byStatus: Object.values(SettlementStatus).reduce((acc, status) => {
+        acc[status] = orders.filter(order => order.status === status).length;
+        return acc;
+      }, {} as Record<string, number>),
+      byType: Object.values(SettlementType).reduce((acc, type) => {
+        acc[type] = orders.filter(order => order.type === type).length;
+        return acc;
+      }, {} as Record<string, number>),
+      totalVolume: orders
+        .filter(order => order.status === SettlementStatus.COMPLETED)
+        .reduce((sum, order) => sum + order.sourceAmount, 0),
+      totalFees: orders
+        .filter(order => order.status === SettlementStatus.COMPLETED)
+        .reduce((sum, order) => sum + order.fees.totalFee, 0),
+      averageProcessingTime: calculateAverageProcessingTime(orders),
+      successRate: calculateSuccessRate(orders)
+    };
+    
     res.json({
       success: true,
       data: stats
-    })
+    });
   } catch (error) {
-    console.error('获取清算统计错误:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: '服务器内部错误' 
-    })
+    console.error('Get settlement stats error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Internal server error'
+    });
   }
-})
+});
 
-// 获取支持的清算路径
-router.get('/routes', async (req: Request, res: Response) => {
-  try {
-    const { fromChain, toChain, token } = req.query
+// 辅助函数
+function calculateAverageProcessingTime(orders: any[]): number {
+  const completedOrders = orders.filter(order => 
+    order.status === SettlementStatus.COMPLETED && 
+    order.processedAt && 
+    order.completedAt
+  );
+  
+  if (completedOrders.length === 0) return 0;
+  
+  const totalTime = completedOrders.reduce((sum, order) => {
+    const processTime = new Date(order.completedAt).getTime() - new Date(order.processedAt).getTime();
+    return sum + (processTime / (1000 * 60)); // 转换为分钟
+  }, 0);
+  
+  return Math.round(totalTime / completedOrders.length);
+}
 
-    // TODO: 根据实际支持情况返回清算路径
-    const routes = [
-      {
-        fromChain: 'ethereum',
-        toChain: 'tron',
-        tokens: ['USDT', 'USDC'],
-        fee: '0.002',
-        estimatedTime: '5-15 minutes',
-        available: true
-      },
-      {
-        fromChain: 'ethereum',
-        toChain: 'bsc',
-        tokens: ['USDT', 'USDC', 'DAI'],
-        fee: '0.001',
-        estimatedTime: '3-10 minutes',
-        available: true
-      },
-      {
-        fromChain: 'bsc',
-        toChain: 'tron',
-        tokens: ['USDT', 'USDC', 'BUSD'],
-        fee: '0.0015',
-        estimatedTime: '5-12 minutes',
-        available: true
-      }
-    ]
+function calculateSuccessRate(orders: any[]): number {
+  if (orders.length === 0) return 0;
+  
+  const completedOrders = orders.filter(order => order.status === SettlementStatus.COMPLETED);
+  return Math.round((completedOrders.length / orders.length) * 100);
+}
 
-    let filteredRoutes = routes
-    if (fromChain) {
-      filteredRoutes = filteredRoutes.filter(route => route.fromChain === fromChain)
-    }
-    if (toChain) {
-      filteredRoutes = filteredRoutes.filter(route => route.toChain === toChain)
-    }
-    if (token) {
-      filteredRoutes = filteredRoutes.filter(route => route.tokens.includes(token as string))
-    }
-
-    res.json({
-      success: true,
-      data: filteredRoutes
-    })
-  } catch (error) {
-    console.error('获取清算路径错误:', error)
-    res.status(500).json({ 
-      success: false, 
-      error: '服务器内部错误' 
-    })
-  }
-})
-
-export default router
+export default router;

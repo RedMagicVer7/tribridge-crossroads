@@ -19,15 +19,25 @@ class ExchangeRateService {
   private cache: Map<string, { rate: ExchangeRate; expiry: number }> = new Map();
   private readonly CACHE_DURATION = 30000; // 30秒缓存
 
-  // CoinGecko API (免费版)
+  // 添加超时设置
+  private readonly API_TIMEOUT = 5000; // 5秒超时
+
+  // CoinGecko API (免费版) - 增强版带超时
   private async fetchFromCoinGecko(): Promise<PriceData> {
     try {
+      // 添加超时处理
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), this.API_TIMEOUT);
+      
       const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=tether,usd-coin,ethereum&vs_currencies=usd,cny,rub'
+        'https://api.coingecko.com/api/v3/simple/price?ids=tether,usd-coin,ethereum&vs_currencies=usd,cny,rub',
+        { signal: controller.signal }
       );
       
+      clearTimeout(timeoutId);
+      
       if (!response.ok) {
-        throw new Error('CoinGecko API request failed');
+        throw new Error(`CoinGecko API request failed: ${response.status}`);
       }
       
       const data = await response.json();
@@ -51,35 +61,66 @@ class ExchangeRateService {
         }
       };
     } catch (error) {
-      console.warn('CoinGecko API failed, using fallback rates', error);
+      console.warn('CoinGecko API failed, will try next source', error);
       throw error;
     }
   }
 
-  // Binance API (备用)
+  // Binance API (备用) - 增强版带超时和更可靠的请求格式
   private async fetchFromBinance(): Promise<PriceData> {
     try {
-      const symbols = ['USDTRUB', 'USDTCNY', 'ETHUSDT'];
+      // 添加超时处理
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), this.API_TIMEOUT);
+      
+      // 使用更可靠的请求格式，避免URL编码问题
+      const symbols = ['USDTRUB', 'ETHUSDT'];
+      const symbolParams = symbols.map(s => encodeURIComponent(s)).join(',');
       const response = await fetch(
-        `https://api.binance.com/api/v3/ticker/price?symbols=[${symbols.map(s => `"${s}"`).join(',')}]`
+        `https://api.binance.com/api/v3/ticker/price?symbol=${symbolParams}`,
+        { 
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          method: 'GET'
+        }
       );
       
+      clearTimeout(timeoutId);
+      
       if (!response.ok) {
-        throw new Error('Binance API request failed');
+        console.warn(`Binance API request failed with status: ${response.status}`);
+        throw new Error(`Binance API request failed: ${response.status}`);
       }
       
-      const data = await response.json();
+      // 处理可能的JSON解析错误
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.warn('Failed to parse Binance API response:', jsonError);
+        throw new Error('Failed to parse Binance API response');
+      }
       
       // 解析Binance数据
       const rates: { [key: string]: number } = {};
-      data.forEach((item: { symbol: string; price: string }) => {
-        rates[item.symbol] = parseFloat(item.price);
-      });
+      if (Array.isArray(data)) {
+        data.forEach((item: { symbol: string; price: string }) => {
+          rates[item.symbol] = parseFloat(item.price);
+        });
+      } else if (data && data.symbol && data.price) {
+        // 处理单个返回对象的情况
+        rates[data.symbol] = parseFloat(data.price);
+      }
+      
+      console.log('Binance API data received:', rates);
       
       return {
         USDT: {
           usd: 1,
-          cny: 7.3, // 需要通过其他方式获取或使用固定汇率
+          cny: 7.3, // 使用默认汇率作为后备
           rub: rates.USDTRUB || 96.5
         },
         USDC: {
@@ -94,7 +135,7 @@ class ExchangeRateService {
         }
       };
     } catch (error) {
-      console.warn('Binance API failed', error);
+      console.warn('Binance API failed, will use mock data', error);
       throw error;
     }
   }
@@ -121,7 +162,7 @@ class ExchangeRateService {
     return baseRates;
   }
 
-  // 获取实时汇率
+  // 获取实时汇率 - 增强错误处理
   async getExchangeRate(from: string, to: string): Promise<ExchangeRate> {
     const cacheKey = `${from}-${to}`;
     const cached = this.cache.get(cacheKey);
@@ -133,17 +174,24 @@ class ExchangeRateService {
 
     try {
       let priceData: PriceData;
+      let source: 'coingecko' | 'binance' | 'mock' = 'mock';
       
       // 首先尝试CoinGecko
       try {
         priceData = await this.fetchFromCoinGecko();
-      } catch {
+        source = 'coingecko';
+      } catch (coingeckoError) {
+        console.warn('CoinGecko API call failed:', coingeckoError.message);
         // 如果CoinGecko失败，尝试Binance
         try {
           priceData = await this.fetchFromBinance();
-        } catch {
+          source = 'binance';
+        } catch (binanceError) {
+          console.warn('Binance API call failed:', binanceError.message);
           // 如果都失败，使用模拟数据
+          console.log('All external APIs failed, using mock exchange rates');
           priceData = this.getMockRates();
+          source = 'mock';
         }
       }
 
@@ -153,7 +201,7 @@ class ExchangeRateService {
         to,
         rate,
         timestamp: Date.now(),
-        source: 'coingecko' // 实际使用的源会根据成功的API调用而变化
+        source: source // 使用实际成功的数据源
       };
 
       // 缓存结果

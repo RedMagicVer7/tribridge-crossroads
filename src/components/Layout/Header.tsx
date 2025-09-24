@@ -2,14 +2,16 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Bell, Settings, User, Menu, LogOut, UserCircle, CreditCard, HelpCircle, ChevronDown } from "lucide-react";
+import { Bell, Settings, User, Menu, LogOut, UserCircle, CreditCard, HelpCircle, ChevronDown, Globe } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { MobileMenu } from "./MobileMenu";
+import { useTranslation } from "../../contexts/TranslationContext";
 
 const Header = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { language, setLanguage, t, detectedLanguage, isAutoDetected } = useTranslation();
   
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -20,6 +22,15 @@ const Header = () => {
     email: "zhangsan@example.com",
     avatar: "ZS"
   };
+
+  const languages = [
+    { code: 'zh-CN' as const, name: '中文', flag: '🇨🇳' },
+    { code: 'en-US' as const, name: 'English', flag: '🇺🇸' },
+    { code: 'ru-RU' as const, name: 'Русский', flag: '🇷🇺' },
+  ];
+
+  const currentLang = languages.find(lang => lang.code === language) || languages[0];
+  const detectedLang = languages.find(lang => lang.code === detectedLanguage) || languages[0];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -36,27 +47,27 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/">
               <Button variant={isActive('/') ? 'default' : 'ghost'} className="text-sm font-medium">
-                Dashboard
+                {t('nav.dashboard')}
               </Button>
             </Link>
             <Link to="/transactions">
               <Button variant={isActive('/transactions') ? 'default' : 'ghost'} className="text-sm font-medium">
-                Transactions
+                {t('nav.transactions')}
               </Button>
             </Link>
             <Link to="/analytics">
               <Button variant={isActive('/analytics') ? 'default' : 'ghost'} className="text-sm font-medium">
-                Analytics
+                {t('nav.analytics')}
               </Button>
             </Link>
             <Link to="/wallet">
               <Button variant={isActive('/wallet') ? 'default' : 'ghost'} className="text-sm font-medium">
-                Wallet
+                {t('nav.wallet')}
               </Button>
             </Link>
             <Link to="/compliance">
               <Button variant={isActive('/compliance') ? 'default' : 'ghost'} className="text-sm font-medium">
-                Compliance
+                {t('nav.compliance')}
               </Button>
             </Link>
           </nav>
@@ -68,6 +79,49 @@ const Header = () => {
             <div className="w-2 h-2 rounded-full bg-success mr-2"></div>
             System Operational
           </Badge>
+          
+          {/* Language Switcher */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                <span className="text-sm">{currentLang.flag}</span>
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <span>选择语言 / Language / Язык</span>
+                  {detectedLanguage && (
+                    <span className="text-xs text-muted-foreground">
+                      🔍 浏览器检测: {detectedLang.flag} {detectedLang.name}
+                      {isAutoDetected && <span className="ml-1 text-green-600">(已应用)</span>}
+                    </span>
+                  )}
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {languages.map((lang) => (
+                <DropdownMenuItem
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code)}
+                  className={`flex items-center gap-2 ${
+                    language === lang.code ? 'bg-accent' : ''
+                  }`}
+                >
+                  <span>{lang.flag}</span>
+                  <span>{lang.name}</span>
+                  <div className="ml-auto flex items-center gap-1">
+                    {lang.code === detectedLanguage && (
+                      <span className="text-xs text-blue-600" title="浏览器检测语言">🔍</span>
+                    )}
+                    {language === lang.code && <span className="text-primary">✓</span>}
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           {/* Notifications */}
           <DropdownMenu>

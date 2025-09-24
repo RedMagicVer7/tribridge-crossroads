@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type Language = 'zh-CN' | 'en-US' | 'ru-RU';
 
@@ -6,6 +6,8 @@ interface TranslationContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  detectedLanguage: Language;
+  isAutoDetected: boolean;
 }
 
 const translations = {
@@ -24,6 +26,83 @@ const translations = {
     'common.loading': '加载中...',
     'common.success': '成功',
     'common.error': '错误',
+    'language.detected': '浏览器检测语言',
+    'language.applied': '已应用',
+    'language.auto': '自动检测',
+    'russia.title': 'TriBridge-RU-DevPlan-v3.0',
+    'russia.subtitle': '中俄跨境支付解决方案。卢布转USDT，智能合约托管，物流验证，符合中俄双方监管要求。',
+    'russia.completed': '全部模块开发完成 - 100% 就绪',
+    'russia.smart_contracts': '智能合约',
+    'russia.otc_exchange': 'OTC 兑换',
+    'russia.logistics': '物流验证',
+    'russia.compliance': '合规检查',
+    'russia.beta_users': 'Beta 测试用户',
+    'russia.beta_ready': '个用户准备就绪',
+    'russia.test_scenarios': '测试场景',
+    'russia.system_architecture': '系统架构',
+    'russia.start_trading': '开始交易',
+    'russia.check_compliance': '检查合规',
+    'russia.track_logistics': '跟踪物流',
+    'russia.smart_contracts_desc': 'Polygon + USDT 托管',
+    'russia.otc_exchange_desc': 'RUB ↔ USDT + 俄罗斯银行',
+    'russia.logistics_desc': 'DHL/FedEx/UPS 跟踪',
+    'russia.compliance_desc': 'KYC/AML + 制裁检查',
+    'russia.additional_users': '个额外用户',
+    'russia.password_all': '所有密码',
+    'russia.active_scenarios': '活跃测试场景',
+    'russia.heavy_mining': '重型采矿设备',
+    'russia.mining_equipment': '采矿设备',
+    'russia.energy_equipment': '能源设备',
+    'russia.escrow': '托管',
+    'russia.in_transit': '运输中',
+    'russia.created': '已创建',
+    'russia.code_files': '代码文件',
+    'russia.modules': '模块',
+    'russia.docker_ready': 'Docker 就绪',
+    'russia.prod_deployment': '生产部署',
+    'russia.job.procurement': '采购',
+    'russia.job.sales': '销售',
+    'russia.job.director': '总监',
+    'russia.job.export': '出口',
+    'russia.stats.code_files_count': '个代码文件',
+    'russia.stats.modules_count': '个模块',
+    'russia.stats.docker_status': 'Docker 就绪',
+    'russia.stats.deployment_status': '生产部署',
+    'russia.action.start_trading': '开始交易',
+    'russia.action.check_compliance': '检查合规',
+    'russia.action.track_logistics': '跟踪物流',
+    'otc.title': 'OTC 交易 (RUB ⇄ USDT)',
+    'otc.description': '中俄企业安全的卢布和 USDT 交易',
+    'otc.buy_usdt': '购买 USDT',
+    'otc.sell_usdt': '出售 USDT',
+    'otc.current_rate': '当前汇率',
+    'otc.create_ad': '创建广告',
+    'otc.verified': '已验证',
+    'otc.premium': '高级',
+    'otc.standard': '标准',
+    'otc.individual': '个人',
+    'otc.company': '公司',
+    'otc.machinery_dealer': '设备商',
+    'otc.orders': '个订单',
+    'otc.minutes': '分钟',
+    'otc.escrow_enabled': '托管已启用',
+    'otc.buy_from_merchant': '从商家购买',
+    'otc.sell_to_merchant': '向商家出售',
+    'otc.loading': '加载中...',
+    'otc.no_active_orders': '没有活跃订单',
+    'otc.limits': '限额',
+    'otc.per_usdt': '每 USDT',
+    'otc.inn': 'INN',
+    'otc.error_loading': '加载错误',
+    'otc.failed_to_load': '无法加载数据',
+    'otc.sberbank': '俄罗斯联邦储蓄银行',
+    'otc.yoomoney': 'Ю金改',
+    'otc.machinery_purchase_remark': '购买 USDT 用于在中国采购设备。支持托管交易。',
+    'otc.rusmash_company': '俄罗斯机器有限公司',
+    'otc.usdt_sale_remark': '出售 USDT 换取卢布。快速处理，24/7 在线。',
+    'russia.trading_description': '正在启动 OTC 交易模块...',
+    'russia.compliance_description': '正在检查 KYC/AML 合规状态...',
+    'russia.logistics_description': '正在查看物流跟踪信息...',
     'exchange.title': '货币兑换',
     'exchange.from': '发送',
     'exchange.to': '接收',
@@ -59,6 +138,83 @@ const translations = {
     'common.loading': 'Loading...',
     'common.success': 'Success',
     'common.error': 'Error',
+    'language.detected': 'Browser Detected Language',
+    'language.applied': 'Applied',
+    'language.auto': 'Auto Detected',
+    'russia.title': 'TriBridge-RU-DevPlan-v3.0',
+    'russia.subtitle': 'Russia-China cross-border payment solution. RUB to USDT conversion with smart contract escrow, logistics verification, and full regulatory compliance.',
+    'russia.completed': 'All development modules completed - 100% ready',
+    'russia.smart_contracts': 'Smart Contracts',
+    'russia.otc_exchange': 'OTC Exchange',
+    'russia.logistics': 'Logistics',
+    'russia.compliance': 'Compliance',
+    'russia.beta_users': 'Beta Test Users',
+    'russia.beta_ready': 'users ready for testing',
+    'russia.test_scenarios': 'Test Scenarios',
+    'russia.system_architecture': 'System Architecture',
+    'russia.start_trading': 'Start Trading',
+    'russia.check_compliance': 'Check Compliance',
+    'russia.track_logistics': 'Track Logistics',
+    'russia.smart_contracts_desc': 'Polygon + USDT Escrow',
+    'russia.otc_exchange_desc': 'RUB ↔ USDT + Russian Banks',
+    'russia.logistics_desc': 'DHL/FedEx/UPS Tracking',
+    'russia.compliance_desc': 'KYC/AML + Sanctions',
+    'russia.additional_users': 'additional users',
+    'russia.password_all': 'Password for all',
+    'russia.active_scenarios': 'Active Test Scenarios',
+    'russia.heavy_mining': 'Heavy Mining Equipment',
+    'russia.mining_equipment': 'Mining Equipment',
+    'russia.energy_equipment': 'Energy Equipment',
+    'russia.escrow': 'Escrow',
+    'russia.in_transit': 'In Transit',
+    'russia.created': 'Created',
+    'russia.code_files': 'code files',
+    'russia.modules': 'modules',
+    'russia.docker_ready': 'Docker Ready',
+    'russia.prod_deployment': 'Prod Deployment',
+    'russia.job.procurement': 'Procurement',
+    'russia.job.sales': 'Sales',
+    'russia.job.director': 'Director',
+    'russia.job.export': 'Export',
+    'russia.stats.code_files_count': '+ code files',
+    'russia.stats.modules_count': ' modules',
+    'russia.stats.docker_status': 'Docker Ready',
+    'russia.stats.deployment_status': 'Prod Deployment',
+    'russia.action.start_trading': 'Start Trading',
+    'russia.action.check_compliance': 'Check Compliance',
+    'russia.action.track_logistics': 'Track Logistics',
+    'otc.title': 'OTC Trading (RUB ⇄ USDT)',
+    'otc.description': 'Secure RUB and USDT trading for Russian companies',
+    'otc.buy_usdt': 'Buy USDT',
+    'otc.sell_usdt': 'Sell USDT',
+    'otc.current_rate': 'Current Rate',
+    'otc.create_ad': 'Create Ad',
+    'otc.verified': 'Verified',
+    'otc.premium': 'Premium',
+    'otc.standard': 'Standard',
+    'otc.individual': 'Individual',
+    'otc.company': 'Company',
+    'otc.machinery_dealer': 'Machinery Dealer',
+    'otc.orders': ' orders',
+    'otc.minutes': ' min',
+    'otc.escrow_enabled': 'Escrow Enabled',
+    'otc.buy_from_merchant': 'Buy from Merchant',
+    'otc.sell_to_merchant': 'Sell to Merchant',
+    'otc.loading': 'Loading...',
+    'otc.no_active_orders': 'No active orders',
+    'otc.limits': 'Limits',
+    'otc.per_usdt': ' per USDT',
+    'otc.inn': 'INN',
+    'otc.error_loading': 'Loading Error',
+    'otc.failed_to_load': 'Failed to load data',
+    'otc.sberbank': 'Sberbank',
+    'otc.yoomoney': 'YooMoney',
+    'otc.machinery_purchase_remark': 'Purchasing USDT for equipment procurement in China. Working with escrow.',
+    'otc.rusmash_company': 'RusMach LLC',
+    'otc.usdt_sale_remark': 'Selling USDT for rubles. Fast processing, working 24/7.',
+    'russia.trading_description': 'Starting OTC trading module...',
+    'russia.compliance_description': 'Checking KYC/AML compliance status...',
+    'russia.logistics_description': 'Viewing logistics tracking information...',
     'exchange.title': 'Currency Exchange',
     'exchange.from': 'From',
     'exchange.to': 'To',
@@ -92,8 +248,85 @@ const translations = {
     'common.cancel': 'Отмена',
     'common.confirm': 'Подтвердить',
     'common.loading': 'Загрузка...',
-    'common.success': 'Успешно',
+    'common.success': 'Успех',
     'common.error': 'Ошибка',
+    'language.detected': 'Язык браузера',
+    'language.applied': 'Применено',
+    'language.auto': 'Автоопределение',
+    'russia.title': 'TriBridge-RU-DevPlan-v3.0',
+    'russia.subtitle': 'Решение для кросс-бордерных платежей между Россией и Китаем. Конвертация рубля в USDT с использованием смарт-контрактов эскроу, проверка логистики и полное соответствие нормативным требованиям.',
+    'russia.completed': 'Все разработки завершены - 100% готово',
+    'russia.smart_contracts': 'Смарт-контракты',
+    'russia.otc_exchange': 'OTC Биржа',
+    'russia.logistics': 'Логистика',
+    'russia.compliance': 'Соответствие',
+    'russia.beta_users': 'Бета-тестеры',
+    'russia.beta_ready': 'пользователей готово к тестированию',
+    'russia.test_scenarios': 'Тестовые сценарии',
+    'russia.system_architecture': 'Системная архитектура',
+    'russia.start_trading': 'Начать торговлю',
+    'russia.check_compliance': 'Проверить соответствие',
+    'russia.track_logistics': 'Отследить логистику',
+    'russia.smart_contracts_desc': 'Polygon + USDT Эскроу',
+    'russia.otc_exchange_desc': 'RUB ↔ USDT + Российские банки',
+    'russia.logistics_desc': 'Отслеживание DHL/FedEx/UPS',
+    'russia.compliance_desc': 'KYC/AML + Санкции',
+    'russia.additional_users': 'дополнительных пользователей',
+    'russia.password_all': 'Пароль для всех',
+    'russia.active_scenarios': 'Активные тестовые сценарии',
+    'russia.heavy_mining': 'Тяжелое горнодобывающее оборудование',
+    'russia.mining_equipment': 'Горнодобывающее оборудование',
+    'russia.energy_equipment': 'Энергетическое оборудование',
+    'russia.escrow': 'Эскроу',
+    'russia.in_transit': 'В пути',
+    'russia.created': 'Создано',
+    'russia.code_files': 'файлов кода',
+    'russia.modules': 'модулей',
+    'russia.docker_ready': 'Docker Готов',
+    'russia.prod_deployment': 'Продакшен',
+    'russia.job.procurement': 'Закупки',
+    'russia.job.sales': 'Продажи',
+    'russia.job.director': 'Директор',
+    'russia.job.export': 'Экспорт',
+    'russia.stats.code_files_count': '+ файлов кода',
+    'russia.stats.modules_count': ' модулей',
+    'russia.stats.docker_status': 'Docker Готов',
+    'russia.stats.deployment_status': 'Продакшен',
+    'russia.action.start_trading': 'Начать торговлю',
+    'russia.action.check_compliance': 'Проверить соответствие',
+    'russia.action.track_logistics': 'Отследить логистику',
+    'otc.title': 'OTC Трейдинг (RUB ⇄ USDT)',
+    'otc.description': 'Безопасная торговля рублями и USDT для российских компаний',
+    'otc.buy_usdt': 'Купить USDT',
+    'otc.sell_usdt': 'Продать USDT',
+    'otc.current_rate': 'Текущий курс',
+    'otc.create_ad': 'Создать объявление',
+    'otc.verified': 'Верифицирован',
+    'otc.premium': 'Премиум',
+    'otc.standard': 'Стандарт',
+    'otc.individual': 'Физлицо',
+    'otc.company': 'Компания',
+    'otc.machinery_dealer': 'Торговец оборудованием',
+    'otc.orders': ' заказов',
+    'otc.minutes': ' мин',
+    'otc.escrow_enabled': 'Эскроу включен',
+    'otc.buy_from_merchant': 'Купить у продавца',
+    'otc.sell_to_merchant': 'Продать покупателю',
+    'otc.loading': 'Загрузка...',
+    'otc.no_active_orders': 'Нет активных заказов',
+    'otc.limits': 'Лимиты',
+    'otc.per_usdt': ' за 1 USDT',
+    'otc.inn': 'ИНН',
+    'otc.error_loading': 'Ошибка загрузки',
+    'otc.failed_to_load': 'Не удалось загрузить данные',
+    'otc.sberbank': 'Сбербанк',
+    'otc.yoomoney': 'ЮMoney',
+    'otc.machinery_purchase_remark': 'Покупка USDT для закупки оборудования в Китае. Работаю с эскроу.',
+    'otc.rusmash_company': 'ООО "РусМаш"',
+    'otc.usdt_sale_remark': 'Продажа USDT за рубли. Быстрая обработка, работаю 24/7.',
+    'russia.trading_description': 'Запуск модуля OTC торговли...',
+    'russia.compliance_description': 'Проверка статуса соответствия KYC/AML...',
+    'russia.logistics_description': 'Просмотр информации о отслеживании логистики...',
     'exchange.title': 'Обмен валют',
     'exchange.from': 'Отправить',
     'exchange.to': 'Получить',
@@ -116,28 +349,47 @@ const translations = {
   }
 };
 
-const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
+const TranslationContext = React.createContext<TranslationContextType | undefined>(undefined);
 
 interface TranslationProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
+
 export const TranslationProvider = ({ children }: TranslationProviderProps) => {
-  const [language, setLanguage] = useState<Language>('zh-CN');
+  // 根据浏览器语言自动检测初始语言
+  const detectBrowserLanguage = (): Language => {
+    const browserLang = navigator.language || navigator.languages[0];
+    
+    // 检测中文
+    if (browserLang.startsWith('zh')) {
+      return 'zh-CN';
+    }
+    // 检测俄文
+    if (browserLang.startsWith('ru')) {
+      return 'ru-RU';
+    }
+    // 默认英文
+    return 'en-US';
+  };
+  
+  const [language, setLanguage] = useState<Language>(detectBrowserLanguage);
+  const detectedLanguage = detectBrowserLanguage();
+  const isAutoDetected = language === detectedLanguage;
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations[typeof language]] || key;
   };
 
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t }}>
+    <TranslationContext.Provider value={{ language, setLanguage, t, detectedLanguage, isAutoDetected }}>
       {children}
     </TranslationContext.Provider>
   );
 };
 
 export const useTranslation = () => {
-  const context = useContext(TranslationContext);
+  const context = React.useContext(TranslationContext);
   if (context === undefined) {
     throw new Error('useTranslation must be used within a TranslationProvider');
   }

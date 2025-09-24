@@ -1,5 +1,6 @@
-import TransactionHistory from "../components/Transactions/TransactionHistory";
+import React from 'react';
 import Header from "../components/Layout/Header";
+import TransactionHistory from "../components/Transactions/TransactionHistory";
 
 const TransactionsPage = () => {
   return (

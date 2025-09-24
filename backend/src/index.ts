@@ -25,6 +25,7 @@ import transactionRoutes from './routes/transaction'
 import blockchainRoutes from './routes/blockchain'
 import settlementRoutes from './routes/settlement'
 import analyticsRoutes from './routes/analytics'
+import russiaEscrowRoutes from './routes/russiaEscrow'
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler'

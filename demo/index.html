@@ -1,36 +1,3 @@
-#!/bin/bash
-
-# TriBridge 演示服务器启动脚本
-# 使用 Python 内置 HTTP 服务器展示项目成果
-
-set -e
-
-# 颜色定义
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-echo "=========================================="
-echo "  TriBridge 演示服务器"
-echo "=========================================="
-
-# 创建演示网页目录
-log_info "创建演示网页..."
-
-mkdir -p demo
-cd demo
-
-# 创建主页面
-cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -468,25 +435,3 @@ cat > index.html << 'EOF'
     </div>
 </body>
 </html>
-EOF
-
-log_success "演示网页创建完成"
-
-# 启动 Python HTTP 服务器
-log_info "启动演示服务器..."
-
-echo ""
-echo "🌐 TriBridge 演示服务器启动中..."
-echo "📍 访问地址: http://localhost:8000"
-echo "⏹️  按 Ctrl+C 停止服务器"
-echo ""
-
-# 检查 Python 版本并启动服务器
-if command -v python3 &> /dev/null; then
-    python3 -m http.server 8000
-elif command -v python &> /dev/null; then
-    python -m SimpleHTTPServer 8000
-else
-    echo "未找到 Python，请安装 Python 后重试"
-    exit 1
-fi
