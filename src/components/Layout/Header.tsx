@@ -70,6 +70,11 @@ const Header = () => {
                 {t('nav.compliance')}
               </Button>
             </Link>
+            <Link to="/russia">
+              <Button variant={isActive('/russia') ? 'default' : 'ghost'} className="text-sm font-medium">
+                🇷🇺 Russia
+              </Button>
+            </Link>
           </nav>
         </div>
 

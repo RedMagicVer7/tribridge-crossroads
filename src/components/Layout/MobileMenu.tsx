@@ -20,7 +20,8 @@ import {
   Settings, 
   User, 
   LogOut,
-  HelpCircle
+  HelpCircle,
+  Globe
 } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 
@@ -48,6 +49,7 @@ export function MobileMenu({ isOpen, onOpenChange }: MobileMenuProps) {
     { icon: BarChart, label: "数据分析", path: "/analytics" },
     { icon: Wallet, label: "钱包管理", path: "/wallet" },
     { icon: Shield, label: "合规中心", path: "/compliance" },
+    { icon: Globe, label: "🇷🇺 Russia", path: "/russia" },
     { icon: Bell, label: "通知中心", path: "/notifications" },
   ]
 
