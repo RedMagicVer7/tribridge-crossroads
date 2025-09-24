@@ -18,6 +18,9 @@ import RiskPage from "./pages/Risk";
 import TestPage from "./pages/TestPage";
 import DebugPage from "./pages/DebugPage";
 import RussiaPage from "./pages/RussiaPage";
+import TradingPage from "./pages/TradingPage";
+import LogisticsPage from "./pages/LogisticsPage";
+import CompliancePageNew from "./pages/CompliancePage";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +59,9 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/russia" element={<RussiaPage />} />
+              <Route path="/trading" element={<TradingPage />} />
+              <Route path="/logistics" element={<LogisticsPage />} />
+              <Route path="/compliance-new" element={<CompliancePageNew />} />
               <Route path="/compliance" element={<CompliancePage />} />
               <Route path="/wallet" element={<WalletPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
