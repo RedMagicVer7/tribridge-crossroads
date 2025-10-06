@@ -11,7 +11,10 @@
   },
   "environments": {
     "production": {
-      "variables": {}
+      "variables": {
+        "RAILWAY_ENVIRONMENT": "true",
+        "NODE_ENV": "production"
+      }
     }
   }
 }

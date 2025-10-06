@@ -78,6 +78,7 @@ NODE_ENV=production
 NODE_ENV=production
 PORT=8000
 FRONTEND_URL=https://your-vercel-app.vercel.app
+RAILWAY_ENVIRONMENT=true  # 重要：修复日志权限问题
 DATABASE_URL=${{Postgres.DATABASE_URL}}  # 自动生成
 REDIS_URL=${{Redis.REDIS_URL}}            # 自动生成
 JWT_SECRET=your-super-secure-jwt-secret
@@ -91,6 +92,7 @@ JWT_SECRET=your-super-secure-jwt-secret
 | API调用失败 | 确认Vercel的VITE_API_URL正确 |
 | 构建失败 | 检查依赖和Node.js版本 |
 | 数据库连接失败 | 确认PostgreSQL插件已安装 |
+| **日志权限错误 (EACCES)** | **设置RAILWAY_ENVIRONMENT=true** 🔴 |
 
 ## 💰 成本预估
 

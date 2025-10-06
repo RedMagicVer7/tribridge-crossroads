@@ -31,7 +31,15 @@ import russiaEscrowRoutes from './routes/russiaEscrow'
 import { errorHandler } from './middleware/errorHandler'
 import { authMiddleware } from './middleware/auth'
 import { validateApiKey } from './middleware/apiKey'
-import { logger } from './utils/logger'
+
+// Logger with fallback for cloud environments
+let logger: any
+try {
+  logger = require('./utils/logger').logger
+} catch (error) {
+  console.warn('Winston logger failed, using simple logger:', error)
+  logger = require('./utils/simple-logger').simpleLogger
+}
 
 // Import services
 import { DatabaseService } from './services/database'

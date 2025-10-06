@@ -49,6 +49,7 @@ const developmentTransports = [
   new winston.transports.Console({
     format
   }),
+  // 开发环境使用本地日志文件
   new winston.transports.File({
     filename: path.join(process.cwd(), 'logs', 'error.log'),
     level: 'error',
@@ -60,26 +61,23 @@ const developmentTransports = [
   })
 ]
 
-// 生产环境传输器
+// 生产环境传输器（只使用控制台，避免文件权限问题）
 const productionTransports = [
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'error.log'),
-    level: 'error',
-    format: productionFormat
-  }),
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'warn.log'),
-    level: 'warn',
-    format: productionFormat
-  }),
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'combined.log'),
+  new winston.transports.Console({
     format: productionFormat
   })
 ]
+
+// 云环境检测（Railway, Vercel, Heroku等）
+const isCloudEnvironment = () => {
+  return !!(process.env.RAILWAY_ENVIRONMENT || 
+           process.env.VERCEL || 
+           process.env.HEROKU_APP_NAME || 
+           process.env.NODE_ENV === 'production')
+}
 
 // 根据环境选择传输器
-const transports = process.env.NODE_ENV === 'production' 
+const transports = isCloudEnvironment() 
   ? productionTransports 
   : developmentTransports
 
@@ -87,13 +85,13 @@ const transports = process.env.NODE_ENV === 'production'
 export const logger = winston.createLogger({
   level: level(),
   levels: logLevels,
-  format: process.env.NODE_ENV === 'production' ? productionFormat : format,
+  format: isCloudEnvironment() ? productionFormat : format,
   transports,
   exitOnError: false
 })
 
-// 如果不是生产环境，也输出到控制台
-if (process.env.NODE_ENV !== 'production') {
+// 在非云环境中添加控制台输出
+if (!isCloudEnvironment()) {
   logger.add(new winston.transports.Console({
     format
   }))
