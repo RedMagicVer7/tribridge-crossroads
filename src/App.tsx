@@ -21,6 +21,14 @@ import RussiaPage from "./pages/RussiaPage";
 
 const queryClient = new QueryClient();
 
+// 获取API基础URL，优先使用环境变量
+const getApiBaseUrl = () => {
+  return import.meta.env.VITE_API_URL || 'http://localhost:8000';
+};
+
+// 设置全局API基础URL
+window.API_BASE_URL = getApiBaseUrl();
+
 // 获取正确的base路径，支持GitHub Pages和Netlify等多种部署环境
 const getBasePath = () => {
   // Vite构建时会注入BASE_URL

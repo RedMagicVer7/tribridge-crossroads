@@ -58,7 +58,7 @@ router.post('/orders', [
   validateRequest
 ], async (req: express.Request, res: express.Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -93,7 +93,7 @@ router.post('/orders', [
 // 获取用户订单
 router.get('/orders/user', [authMiddleware], async (req: express.Request, res: express.Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -123,7 +123,7 @@ router.put('/orders/:orderId/cancel', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { orderId } = req.params;
     
     if (!userId) {
@@ -157,7 +157,7 @@ router.post('/transactions', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -188,7 +188,7 @@ router.get('/transactions/:transactionId', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { transactionId } = req.params;
     
     if (!userId) {
@@ -230,7 +230,7 @@ router.get('/transactions/:transactionId', [
 // 获取用户交易
 router.get('/transactions/user/all', [authMiddleware], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -262,7 +262,7 @@ router.post('/transactions/:transactionId/messages', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { transactionId } = req.params;
     const { message, type = 'text' } = req.body;
     
@@ -303,7 +303,7 @@ router.put('/transactions/:transactionId/confirm-payment', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { transactionId } = req.params;
     
     if (!userId) {
@@ -336,7 +336,7 @@ router.put('/transactions/:transactionId/release', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { transactionId } = req.params;
     const { releaseCode } = req.body;
     
@@ -370,7 +370,7 @@ router.put('/transactions/:transactionId/dispute', [
   validateRequest
 ], async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.userId;
     const { transactionId } = req.params;
     const { reason } = req.body;
     

@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   
   return {
-    // 对于Netlify部署，使用相对路径
-    base: './',
+    // 对于Vercel部署，使用根路径
+    base: '/',
     server: {
       host: "::",
       port: 3000,

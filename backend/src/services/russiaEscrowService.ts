@@ -139,7 +139,12 @@ export class RussiaEscrowService {
    */
   private getContractWithSigner(privateKey: string): ethers.Contract {
     const wallet = new ethers.Wallet(privateKey, this.provider);
-    return this.contract.connect(wallet);
+    const config = CONTRACT_CONFIG[this.network];
+    return new ethers.Contract(
+      config.contractAddress,
+      RUSSIA_ESCROW_ABI,
+      wallet
+    );
   }
 
   /**

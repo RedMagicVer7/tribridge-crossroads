@@ -29,6 +29,8 @@
     "deploy:github": "gh-pages -d dist",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist",
+    "deploy:railway": "cd backend && railway up",
+    "deploy:prepare": "./deploy-vercel-railway.sh",
     "docker:build": "docker build -t tribridge .",
     "docker:run": "docker run -p 8000:8000 tribridge",
     "docker:compose": "docker-compose up --build"

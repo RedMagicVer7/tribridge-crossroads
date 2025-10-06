@@ -38,6 +38,10 @@ import { DatabaseService } from './services/database'
 import { RedisService } from './services/redis'
 import { BlockchainService } from './services/blockchain'
 
+// Create service instances
+const database = new DatabaseService()
+const redis = new RedisService()
+
 class TriBridgeAPI {
   private app: express.Application
   private server: any
