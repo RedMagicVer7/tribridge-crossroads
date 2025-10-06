@@ -167,7 +167,7 @@ class TriBridgeServer {
 
   public async start(): Promise<void> {
     try {
-      const port = process.env.PORT || 8000
+      const port = parseInt(process.env.PORT || '8000')
 
       // 测试Redis连接
       try {
