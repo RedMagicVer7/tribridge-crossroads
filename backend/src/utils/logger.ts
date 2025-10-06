@@ -44,30 +44,6 @@ const productionFormat = winston.format.combine(
   winston.format.json()
 )
 
-// 开发环境传输器
-const developmentTransports = [
-  new winston.transports.Console({
-    format
-  }),
-  // 开发环境使用本地日志文件
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'error.log'),
-    level: 'error',
-    format: productionFormat
-  }),
-  new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'combined.log'),
-    format: productionFormat
-  })
-]
-
-// 生产环境传输器（只使用控制台，避免文件权限问题）
-const productionTransports = [
-  new winston.transports.Console({
-    format: productionFormat
-  })
-]
-
 // 云环境检测（Railway, Vercel, Heroku等）
 const isCloudEnvironment = () => {
   return !!(process.env.RAILWAY_ENVIRONMENT || 
@@ -76,26 +52,51 @@ const isCloudEnvironment = () => {
            process.env.NODE_ENV === 'production')
 }
 
-// 根据环境选择传输器
-const transports = isCloudEnvironment() 
-  ? productionTransports 
-  : developmentTransports
+// 动态创建传输器 - 关键修复：避免在云环境中创建File传输器
+const createTransports = () => {
+  const transports = []
+  
+  // 总是添加控制台传输器
+  transports.push(new winston.transports.Console({
+    format: isCloudEnvironment() ? productionFormat : format
+  }))
+  
+  // 只在非云环境中添加文件传输器
+  if (!isCloudEnvironment()) {
+    try {
+      // 尝试创建日志目录
+      const fs = require('fs')
+      const logsDir = path.join(process.cwd(), 'logs')
+      if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir, { recursive: true })
+      }
+      
+      transports.push(new winston.transports.File({
+        filename: path.join(logsDir, 'error.log'),
+        level: 'error',
+        format: productionFormat
+      }))
+      
+      transports.push(new winston.transports.File({
+        filename: path.join(logsDir, 'combined.log'),
+        format: productionFormat
+      }))
+    } catch (error) {
+      console.warn('Failed to create file transports, using console only:', error.message)
+    }
+  }
+  
+  return transports
+}
 
-// 创建logger实例
+// 创建logger实例 - 使用动态传输器
 export const logger = winston.createLogger({
   level: level(),
   levels: logLevels,
   format: isCloudEnvironment() ? productionFormat : format,
-  transports,
+  transports: createTransports(),
   exitOnError: false
 })
-
-// 在非云环境中添加控制台输出
-if (!isCloudEnvironment()) {
-  logger.add(new winston.transports.Console({
-    format
-  }))
-}
 
 // HTTP请求日志中间件
 export const httpLogger = (req: any, res: any, next: any) => {

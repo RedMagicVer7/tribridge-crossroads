@@ -32,13 +32,22 @@ import { errorHandler } from './middleware/errorHandler'
 import { authMiddleware } from './middleware/auth'
 import { validateApiKey } from './middleware/apiKey'
 
-// Logger with fallback for cloud environments
+// Logger with enhanced fallback for cloud environments
 let logger: any
 try {
+  // 首先尝试导入winston logger
   logger = require('./utils/logger').logger
+  console.log('✅ Winston logger loaded successfully')
 } catch (error) {
-  console.warn('Winston logger failed, using simple logger:', error)
-  logger = require('./utils/simple-logger').simpleLogger
+  console.warn('⚠️  Winston logger failed, using simple fallback:', error.message)
+  // 如果winston失败，使用简单的console logger
+  logger = {
+    info: (msg: string, ...args: any[]) => console.log(`[INFO] ${new Date().toISOString()}: ${msg}`, ...args),
+    error: (msg: string, ...args: any[]) => console.error(`[ERROR] ${new Date().toISOString()}: ${msg}`, ...args),
+    warn: (msg: string, ...args: any[]) => console.warn(`[WARN] ${new Date().toISOString()}: ${msg}`, ...args),
+    debug: (msg: string, ...args: any[]) => console.log(`[DEBUG] ${new Date().toISOString()}: ${msg}`, ...args),
+    http: (msg: string, ...args: any[]) => console.log(`[HTTP] ${new Date().toISOString()}: ${msg}`, ...args)
+  }
 }
 
 // Import services
