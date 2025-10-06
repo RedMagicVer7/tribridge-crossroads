@@ -16,32 +16,57 @@ export class RedisService {
   private isConnected: boolean = false
 
   constructor(config?: Partial<RedisConfig>) {
-    this.config = {
-      host: config?.host || process.env.REDIS_HOST || 'localhost',
-      port: config?.port || parseInt(process.env.REDIS_PORT || '6379'),
-      password: config?.password || process.env.REDIS_PASSWORD,
-      db: config?.db || parseInt(process.env.REDIS_DB || '0'),
-      retryDelayOnFailover: config?.retryDelayOnFailover || 100,
-      maxRetriesPerRequest: config?.maxRetriesPerRequest || 3
-    }
-
-    // 创建Redis客户端
-    const redisUrl = this.config.password 
-      ? `redis://:${this.config.password}@${this.config.host}:${this.config.port}/${this.config.db}`
-      : `redis://${this.config.host}:${this.config.port}/${this.config.db}`
-
-    this.client = createClient({
-      url: redisUrl,
-      socket: {
-        reconnectStrategy: (retries) => {
-          if (retries >= 3) {
-            logger.error('Redis重连失败，超过最大重试次数')
-            return false
+    // 优先使用REDIS_URL（Railway提供）
+    if (process.env.REDIS_URL && !config) {
+      this.client = createClient({
+        url: process.env.REDIS_URL,
+        socket: {
+          reconnectStrategy: (retries) => {
+            if (retries >= 3) {
+              logger.error('Redis重连失败，超过最大重试次数')
+              return false
+            }
+            return Math.min(retries * 100, 3000)
           }
-          return Math.min(retries * 100, 3000)
         }
+      })
+      
+      // 记录配置信息用于日志
+      this.config = {
+        host: 'Railway Managed',
+        port: 6379,
+        password: '***',
+        db: 0
       }
-    })
+    } else {
+      // 使用分解配置（本地开发）
+      this.config = {
+        host: config?.host || process.env.REDIS_HOST || 'localhost',
+        port: config?.port || parseInt(process.env.REDIS_PORT || '6379'),
+        password: config?.password || process.env.REDIS_PASSWORD,
+        db: config?.db || parseInt(process.env.REDIS_DB || '0'),
+        retryDelayOnFailover: config?.retryDelayOnFailover || 100,
+        maxRetriesPerRequest: config?.maxRetriesPerRequest || 3
+      }
+
+      // 创建Redis客户端
+      const redisUrl = this.config.password 
+        ? `redis://:${this.config.password}@${this.config.host}:${this.config.port}/${this.config.db}`
+        : `redis://${this.config.host}:${this.config.port}/${this.config.db}`
+
+      this.client = createClient({
+        url: redisUrl,
+        socket: {
+          reconnectStrategy: (retries) => {
+            if (retries >= 3) {
+              logger.error('Redis重连失败，超过最大重试次数')
+              return false
+            }
+            return Math.min(retries * 100, 3000)
+          }
+        }
+      })
+    }
 
     // 监听连接事件
     this.client.on('connect', () => {

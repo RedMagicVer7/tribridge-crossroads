@@ -18,34 +18,56 @@ export class DatabaseService {
   private config: DatabaseConfig
 
   constructor(config?: Partial<DatabaseConfig>) {
-    this.config = {
-      host: config?.host || process.env.DB_HOST || 'localhost',
-      port: config?.port || parseInt(process.env.DB_PORT || '5432'),
-      database: config?.database || process.env.DB_NAME || 'tribridge',
-      user: config?.user || process.env.DB_USER || 'postgres',
-      password: config?.password || process.env.DB_PASSWORD || 'password',
-      ssl: config?.ssl || process.env.DB_SSL === 'true',
-      max: config?.max || 20,
-      idleTimeoutMillis: config?.idleTimeoutMillis || 30000,
-      connectionTimeoutMillis: config?.connectionTimeoutMillis || 2000
-    }
+    // 优先使用DATABASE_URL（Railway提供）
+    if (process.env.DATABASE_URL && !config) {
+      this.pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000
+      })
+      
+      // 记录配置信息用于日志
+      this.config = {
+        host: 'Railway Managed',
+        port: 5432,
+        database: 'tribridge',
+        user: 'railway',
+        password: '***',
+        ssl: process.env.NODE_ENV === 'production'
+      }
+    } else {
+      // 使用分解配置（本地开发）
+      this.config = {
+        host: config?.host || process.env.DB_HOST || 'localhost',
+        port: config?.port || parseInt(process.env.DB_PORT || '5432'),
+        database: config?.database || process.env.DB_NAME || 'tribridge',
+        user: config?.user || process.env.DB_USER || 'postgres',
+        password: config?.password || process.env.DB_PASSWORD || 'password',
+        ssl: config?.ssl || process.env.DB_SSL === 'true',
+        max: config?.max || 20,
+        idleTimeoutMillis: config?.idleTimeoutMillis || 30000,
+        connectionTimeoutMillis: config?.connectionTimeoutMillis || 2000
+      }
 
-    const poolConfig: PoolConfig = {
-      host: this.config.host,
-      port: this.config.port,
-      database: this.config.database,
-      user: this.config.user,
-      password: this.config.password,
-      max: this.config.max,
-      idleTimeoutMillis: this.config.idleTimeoutMillis,
-      connectionTimeoutMillis: this.config.connectionTimeoutMillis
-    }
+      const poolConfig: PoolConfig = {
+        host: this.config.host,
+        port: this.config.port,
+        database: this.config.database,
+        user: this.config.user,
+        password: this.config.password,
+        max: this.config.max,
+        idleTimeoutMillis: this.config.idleTimeoutMillis,
+        connectionTimeoutMillis: this.config.connectionTimeoutMillis
+      }
 
-    if (this.config.ssl) {
-      poolConfig.ssl = { rejectUnauthorized: false }
-    }
+      if (this.config.ssl) {
+        poolConfig.ssl = { rejectUnauthorized: false }
+      }
 
-    this.pool = new Pool(poolConfig)
+      this.pool = new Pool(poolConfig)
+    }
 
     // 监听连接事件
     this.pool.on('connect', () => {
