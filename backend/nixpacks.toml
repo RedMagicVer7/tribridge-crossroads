@@ -4,11 +4,10 @@ nixPkgs = ['nodejs-18_x', 'npm-9_x']
 [phases.install]
 cmds = ['npm ci']
 
-[phases.build]
-cmds = ['npm run build']
+# 移除构建步骤，直接运行JavaScript
 
 [start]
-cmd = 'npm run start:minimal'
+cmd = 'npm run start:js'
 
 [variables]
 NODE_ENV = 'production'

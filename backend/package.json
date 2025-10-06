@@ -7,7 +7,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "start:minimal": "node dist/index-minimal.js",
+    "start:js": "node src/index-js.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:run": "jest",
