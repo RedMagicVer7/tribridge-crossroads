@@ -67,7 +67,7 @@ class TriBridgeAPI {
 
   constructor() {
     this.app = express()
-    this.port = parseInt(process.env.PORT || '3001')
+    this.port = parseInt(process.env.PORT || '8000')
     this.server = createServer(this.app)
     this.io = new Server(this.server, {
       cors: {
