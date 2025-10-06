@@ -1,13 +1,12 @@
 [phases.setup]
 nixPkgs = ['nodejs-18_x', 'npm-9_x']
 
-[phases.install]
-cmds = ['npm ci']
+# 使用基础HTTP服务器，不需要npm安装
 
 # 移除构建步骤，直接运行JavaScript
 
 [start]
-cmd = 'npm run start:js'
+cmd = 'npm run start:basic'
 
 [variables]
 NODE_ENV = 'production'
